@@ -34,7 +34,7 @@ public class SimpleCommentController
 		
 		SimpleComment simpleComment = new SimpleComment();
 		Date datetime = new Date();
-		System.out.println(datetime);
+		
 		simpleComment.setText(text);
 		simpleComment.setDatetime(datetime);
 		simpleCommentRepository.save(simpleComment);
