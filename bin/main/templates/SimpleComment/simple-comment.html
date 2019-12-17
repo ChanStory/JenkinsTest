@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>한줄코멘트</title>
+</head>
+<body>
+	<!-- 보드 -->
+	<table>
+		<tr th:each="list : ${CommentList}">
+			<td th:text="${list.comment_no}"></td>
+			<td th:text="${list.text}"></td>
+			<td th:text="${list.datetime}"></td>
+		</tr>
+	</table>
+	<!-- 입력 -->
+	<form id="comment-insert" method="post" action="/SimpleComment/Insert">
+		<input type="text" name="text" placeholder="내용"/>
+		<input type="submit" value="입력" />
+	</form>
+	
+</body>
+</html>
