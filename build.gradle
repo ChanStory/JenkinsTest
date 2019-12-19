@@ -37,13 +37,8 @@ dependencies {
 }
 
 bootJar {
-
-    archiveBaseName = '-'
-
-    archiveFileName = '-.jar'
-
-    archiveVersion = "0.0.0"
-
+    archiveBaseName = 'myapp'
+    archiveFileName = 'myapp.jar'
 }
 
 test {
