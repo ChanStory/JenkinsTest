@@ -41,6 +41,7 @@ bootJar {
     archiveFileName = 'myapp.jar'
 }
 
+
 test {
 	useJUnitPlatform()
 }
