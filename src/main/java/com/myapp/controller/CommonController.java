@@ -51,26 +51,21 @@ public class CommonController {
 	
 	public static void logic(EntityManager em) {
 
-        String id = "id1";
+        String id = "id2";
         Member member = new Member();
         member.setId(id);
-        member.setUsername("jihan");
+        member.setUsername("지한");
         member.setAge(2);
-System.out.println("log1" + member.getId() + member.getUsername() + member.getAge());
         //등록
         em.persist(member);
-        System.out.println("log2" + member.getId() + member.getUsername() + member.getAge());
         //수정
         member.setAge(20);
-        System.out.println("log3" + member.getId() + member.getUsername() + member.getAge());
         //한 건 조회
         Member findMember = em.find(Member.class, id);
         System.out.println("findMember=" + findMember.getUsername() + ", age=" + findMember.getAge());
-        System.out.println("log4" + member.getId() + member.getUsername() + member.getAge());
         //목록 조회
         List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
         System.out.println("members.size=" + members.size());
-        System.out.println("log5" + member.getId() + member.getUsername() + member.getAge());
         //삭제
         em.remove(member);
 
