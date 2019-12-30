@@ -17,8 +17,9 @@
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.use_sql_comments" value="true" />
             <property name="hibernate.id.new_generator_mappings" value="true" />
-
-            <!--<property name="hibernate.hbm2ddl.auto" value="create" />-->
+			
+			<!-- 앱 실행시점에 테이블을 자동 생성 -->
+            <property name="hibernate.hbm2ddl.auto" value="create" />
         </properties>
     </persistence-unit>
     
