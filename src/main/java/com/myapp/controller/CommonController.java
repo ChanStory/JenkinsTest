@@ -51,9 +51,8 @@ public class CommonController {
 	
 	public static void logic(EntityManager em) {
 
-        String id = "id2";
+        Long id = (long) 1;
         Member member = new Member();
-        member.setId(id);
         member.setUsername("지한");
         member.setAge(2);
         //등록
@@ -67,7 +66,7 @@ public class CommonController {
         List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
         System.out.println("members.size=" + members.size());
         //삭제
-        em.remove(member);
+        //em.remove(member);
 
     }
 }
