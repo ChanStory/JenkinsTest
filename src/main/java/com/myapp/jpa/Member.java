@@ -9,12 +9,16 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.ManyToAny;
 
 import com.myapp.common.RoleType;
 
@@ -59,4 +63,8 @@ public class Member {
     
     @Lob
     private String description;
+    
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 }

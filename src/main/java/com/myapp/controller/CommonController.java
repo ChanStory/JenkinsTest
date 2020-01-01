@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.myapp.jpa.Member;
+import com.myapp.jpa.Team;
 
 @Controller
 public class CommonController {
@@ -52,19 +53,46 @@ public class CommonController {
 	public static void logic(EntityManager em) {
 
         Long id = (long) 1;
-        Member member = new Member();
-        member.setUsername("지한");
-        member.setAge(2);
+        Member member1 = new Member();
+        member1.setUsername("지한");
+        member1.setAge(2);
+        
+        Member member2 = new Member();
+        member2.setUsername("태찬");
+        member2.setAge(25);
+        
+        //팀정보 추가
+        Team team1 = new Team();
+        team1.setId("team1");
+        team1.setName("팀1");
+        em.persist(team1);
+        
+        Team team2 = new Team();
+        team2.setId("team2");
+        team2.setName("팀2");
+        em.persist(team2);
+        
+        member1.setTeam(team1);
+        member2.setTeam(team1);
         //등록
-        em.persist(member);
+        em.persist(member1);
+        em.persist(member2);
+        
         //수정
-        member.setAge(20);
+        member1.setTeam(team2);
         //한 건 조회
-        Member findMember = em.find(Member.class, id);
-        System.out.println("findMember=" + findMember.getUsername() + ", age=" + findMember.getAge());
+		/*
+		 * Member findMember = em.find(Member.class, id);
+		 * System.out.println("findMember=" + findMember.getUsername() + ", age=" +
+		 * findMember.getAge());
+		 */
         //목록 조회
-        List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
-        System.out.println("members.size=" + members.size());
+        String jpql = "select m from Member m join m.team t where t.name=:teamName";
+        List<Member> list = em.createQuery(jpql, Member.class).setParameter("teamName", "팀2").getResultList();
+        
+        for(Member member: list) {
+        	System.out.println("member name : " + member.getUsername());
+        }
         //삭제
         //em.remove(member);
 

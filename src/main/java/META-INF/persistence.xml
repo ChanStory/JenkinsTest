@@ -3,6 +3,7 @@
 	<persistence-unit name="myapp">
 		<class>com.myapp.jpa.Member</class>
 		<class>com.myapp.jpa.SimpleComment</class>
+		<class>com.myapp.jpa.Team</class>
         <properties>
 			
             <!-- 필수 속성 -->
