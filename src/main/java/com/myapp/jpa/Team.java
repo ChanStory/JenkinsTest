@@ -1,12 +1,11 @@
 package com.myapp.jpa;
 
-import java.util.Date;
+import java.util.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import com.myapp.common.RoleType;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,4 +19,7 @@ public class Team {
 	private String id;
 	
 	private String name;
+	
+	@OneToMany(mappedBy = "team")
+	private List<Member> members = new ArrayList<Member>();
 }

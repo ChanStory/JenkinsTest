@@ -52,7 +52,7 @@ public class CommonController {
 	
 	public static void logic(EntityManager em) {
 
-        Long id = (long) 1;
+        //Long id = (long) 1;
         Member member1 = new Member();
         member1.setUsername("지한");
         member1.setAge(2);
@@ -62,24 +62,31 @@ public class CommonController {
         member2.setAge(25);
         
         //팀정보 추가
-        Team team1 = new Team();
-        team1.setId("team1");
-        team1.setName("팀1");
-        em.persist(team1);
+		
+		Team team1 = new Team(); team1.setId("team1"); team1.setName("팀1");
+		em.persist(team1);
+		 
+        System.out.println("log1");
         
-        Team team2 = new Team();
-        team2.setId("team2");
-        team2.setName("팀2");
-        em.persist(team2);
-        
+        System.out.println("log2");
         member1.setTeam(team1);
         member2.setTeam(team1);
+        System.out.println("log3");
         //등록
         em.persist(member1);
         em.persist(member2);
-        
+        em.flush();
+        System.out.println("log4");
+        Team team = em.find(Team.class, "team1");
+        System.out.println("log5");
+        List<Member> members = team.getMembers();
+        System.out.println("members size : "+members.size());
+        for(Member member: members) {
+        	System.out.println("member name : " + member.getUsername());
+        }
+        System.out.println("log6");
         //수정
-        member1.setTeam(team2);
+        //member1.setTeam(team1);
         //한 건 조회
 		/*
 		 * Member findMember = em.find(Member.class, id);
@@ -87,12 +94,14 @@ public class CommonController {
 		 * findMember.getAge());
 		 */
         //목록 조회
-        String jpql = "select m from Member m join m.team t where t.name=:teamName";
-        List<Member> list = em.createQuery(jpql, Member.class).setParameter("teamName", "팀2").getResultList();
-        
-        for(Member member: list) {
-        	System.out.println("member name : " + member.getUsername());
-        }
+		/*
+		 * String jpql = "select m from Member m join m.team t where t.name=:teamName";
+		 * List<Member> list = em.createQuery(jpql,
+		 * Member.class).setParameter("teamName", "팀2").getResultList();
+		 * 
+		 * for(Member member: list) { System.out.println("member name : " +
+		 * member.getUsername()); }
+		 */
         //삭제
         //em.remove(member);
 
