@@ -1,6 +1,6 @@
 package com.myapp.controller;
 
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.myapp.jpa.Member;
+import com.myapp.jpa.Orders;
+import com.myapp.jpa.Product;
 import com.myapp.jpa.Team;
 
 @Controller
@@ -52,14 +54,10 @@ public class CommonController {
 	
 	public static void logic(EntityManager em) {
 
-        //Long id = (long) 1;
-        Member member1 = new Member();
-        member1.setUsername("지한");
-        member1.setAge(2);
-        
-        Member member2 = new Member();
-        member2.setUsername("태찬");
-        member2.setAge(25);
+		//멤버 추가
+        Member member = new Member();
+        member.setUsername("태찬");
+        member.setAge(25);
         
         //팀정보 추가
 		Team team1 = new Team(); 
@@ -67,39 +65,35 @@ public class CommonController {
 		team1.setName("팀1");
 		em.persist(team1);
 		 
-        member1.setTeam(team1);
-        member2.setTeam(team1);
+        member.setTeam(team1);
+        em.persist(member);
         
-        //등록
-        em.persist(member1);
-        em.persist(member2);
+        //상품 추가
+        Product product = new Product();
         
-        Team team = em.find(Team.class, "team1");
-        List<Member> members = team.getMembers();
+        product.setId("상품1");
+        product.setName("상품이름1");
         
-        System.out.println("members size : "+members.size());
-        for(Member member: members) {
-        	System.out.println("member name : " + member.getUsername());
-        }
-        //수정
-        //member1.setTeam(team1);
-        //한 건 조회
-		/*
-		 * Member findMember = em.find(Member.class, id);
-		 * System.out.println("findMember=" + findMember.getUsername() + ", age=" +
-		 * findMember.getAge());
-		 */
-        //목록 조회
-		/*
-		 * String jpql = "select m from Member m join m.team t where t.name=:teamName";
-		 * List<Member> list = em.createQuery(jpql,
-		 * Member.class).setParameter("teamName", "팀2").getResultList();
-		 * 
-		 * for(Member member: list) { System.out.println("member name : " +
-		 * member.getUsername()); }
-		 */
-        //삭제
-        //em.remove(member);
-
-    }
+        em.persist(product);
+        
+        //주문 추가
+        Orders order = new Orders();
+        order.setMember(member);
+        order.setProduct(product);
+        order.setOrderAmount(1);
+        
+        em.persist(order);
+        
+        //주문 출력
+		
+        Orders findOrder = em.find(Orders.class, (long)1);
+		  
+        Member findMember = findOrder.getMember(); Product findProduct =
+        		findOrder.getProduct();
+		  
+        System.out.println("orderUserName : " + findMember.getUsername());
+        System.out.println("orderProduct : " + findProduct.getName());
+        System.out.println("orderAmount : " + findOrder.getOrderAmount());
+		
+	}
 }

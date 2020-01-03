@@ -1,6 +1,6 @@
 package com.myapp.jpa;
 
-import java.util.Date;
+import java.util.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,13 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.ManyToAny;
 
 import com.myapp.common.RoleType;
 
@@ -32,7 +32,7 @@ import lombok.Setter;
 @Getter @Setter
 @Table(name="MEMBER", uniqueConstraints = {@UniqueConstraint(
 		name = "ID_UNIQUE",
-		columnNames = "ID")}
+		columnNames = "MEMBER_ID")}
 		)
 @SequenceGenerator(
 		name = "MEMBER_SEQ_GENERATOR",
@@ -42,7 +42,7 @@ import lombok.Setter;
 public class Member {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "MEMBER_ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
     				generator = "MEMBER_SEQ_GENERATOR")
     private Long id;
@@ -63,6 +63,9 @@ public class Member {
     
     @Lob
     private String description;
+    
+    @OneToMany(mappedBy = "member")
+    private List<Orders> orders = new ArrayList<Orders>();
     
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
