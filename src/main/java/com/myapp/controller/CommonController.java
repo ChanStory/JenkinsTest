@@ -62,29 +62,25 @@ public class CommonController {
         member2.setAge(25);
         
         //팀정보 추가
-		
-		Team team1 = new Team(); team1.setId("team1"); team1.setName("팀1");
+		Team team1 = new Team(); 
+		team1.setId("team1"); 
+		team1.setName("팀1");
 		em.persist(team1);
 		 
-        System.out.println("log1");
-        
-        System.out.println("log2");
         member1.setTeam(team1);
         member2.setTeam(team1);
-        System.out.println("log3");
+        
         //등록
         em.persist(member1);
         em.persist(member2);
-        em.flush();
-        System.out.println("log4");
+        
         Team team = em.find(Team.class, "team1");
-        System.out.println("log5");
         List<Member> members = team.getMembers();
+        
         System.out.println("members size : "+members.size());
         for(Member member: members) {
         	System.out.println("member name : " + member.getUsername());
         }
-        System.out.println("log6");
         //수정
         //member1.setTeam(team1);
         //한 건 조회

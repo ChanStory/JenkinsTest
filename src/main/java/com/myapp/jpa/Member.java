@@ -67,4 +67,12 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
     private Team team;
+    
+    public void setTeam(Team team) {
+    	if(this.team != null) {
+    		this.team.getMembers().remove(this);
+    	}
+    	this.team = team;
+    	team.getMembers().add(this);
+    }
 }
