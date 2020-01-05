@@ -6,6 +6,10 @@
 		<class>com.myapp.jpa.Team</class>
 		<class>com.myapp.jpa.Product</class>
 		<class>com.myapp.jpa.Orders</class>
+		<class>com.myapp.jpa.Item</class>
+		<class>com.myapp.jpa.Album</class>
+		<class>com.myapp.jpa.Movie</class>
+		<class>com.myapp.jpa.Book</class>
         <properties>
 			
             <!-- 필수 속성 -->

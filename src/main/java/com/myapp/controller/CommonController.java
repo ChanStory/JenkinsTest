@@ -10,6 +10,7 @@ import javax.persistence.Persistence;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.myapp.jpa.Book;
 import com.myapp.jpa.Member;
 import com.myapp.jpa.Orders;
 import com.myapp.jpa.Product;
@@ -36,7 +37,7 @@ public class CommonController {
 
 
             tx.begin(); //트랜잭션 시작
-            logic(em);  //비즈니스 로직
+            inheritanceLogic(em);  //비즈니스 로직
             tx.commit();//트랜잭션 커밋
 
         } catch (Exception e) {
@@ -95,5 +96,21 @@ public class CommonController {
         System.out.println("orderProduct : " + findProduct.getName());
         System.out.println("orderAmount : " + findOrder.getOrderAmount());
 		
+	}
+	
+	public static void inheritanceLogic(EntityManager em) {
+		Book book = new Book();
+		book.setAUTHOR("김영한");
+		book.setName("JPA프로그래밍");
+		book.setPrice(38000);
+		
+		em.persist(book);
+		em.flush();
+		
+		em.clear();
+		Book findBook = em.find(Book.class, (long)1);
+		
+		System.out.println("Book name : " + findBook.getName());
+		System.out.println("Book Author : " + findBook.getAUTHOR());
 	}
 }
