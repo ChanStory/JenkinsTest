@@ -10,6 +10,8 @@
 		<class>com.myapp.jpa.Album</class>
 		<class>com.myapp.jpa.Movie</class>
 		<class>com.myapp.jpa.Book</class>
+		<class>com.myapp.jpa.Period</class>
+		<class>com.myapp.jpa.Address</class>
         <properties>
 			
             <!-- 필수 속성 -->

@@ -10,9 +10,11 @@ import javax.persistence.Persistence;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.myapp.jpa.Address;
 import com.myapp.jpa.Book;
 import com.myapp.jpa.Member;
 import com.myapp.jpa.Orders;
+import com.myapp.jpa.Period;
 import com.myapp.jpa.Product;
 import com.myapp.jpa.Team;
 
@@ -37,7 +39,7 @@ public class CommonController {
 
 
             tx.begin(); //트랜잭션 시작
-            inheritanceLogic(em);  //비즈니스 로직
+            embeddedLogic(em);  //비즈니스 로직
             tx.commit();//트랜잭션 커밋
 
         } catch (Exception e) {
@@ -112,5 +114,29 @@ public class CommonController {
 		
 		System.out.println("Book name : " + findBook.getName());
 		System.out.println("Book Author : " + findBook.getAUTHOR());
+	}
+	
+	public static void embeddedLogic(EntityManager em) {
+		//멤버 추가
+        Member member = new Member();
+        member.setUsername("태찬");
+        member.setAge(25);
+        
+        Period period = new Period();
+        period.setStartDate(new Date());
+        
+        Address address = new Address();
+        address.setCity("부천시");
+        address.setStreet("계남로 196");
+        
+        member.setWorkPeriod(period);
+        member.setHomeAddress(address);
+        
+        em.persist(member);
+        
+        Member findMember = em.find(Member.class, (long)1);
+        
+        System.out.println("findMember startDate : " + findMember.getWorkPeriod().getStartDate());
+        System.out.println("findMember address : " + findMember.getHomeAddress().getCity() + " " + findMember.getHomeAddress().getStreet());
 	}
 }

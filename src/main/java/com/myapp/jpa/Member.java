@@ -3,6 +3,7 @@ package com.myapp.jpa;
 import java.util.*;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -70,6 +71,12 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
     private Team team;
+    
+    @Embedded
+    Period workPeriod;
+    
+    @Embedded
+    Address homeAddress;
     
     public void setTeam(Team team) {
     	if(this.team != null) {
