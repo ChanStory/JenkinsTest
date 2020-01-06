@@ -2,22 +2,57 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>한줄코멘트</title>
+<meta name="viewport" content="width=device-width", initial-scale="1">
+<link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+<title>부트 스트랩</title>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
 </head>
 <body>
-	<!-- 보드 -->
-	<table>
+	<div class="container">
+		<div class="jumbotron">
+			<h1 class="text-center">쇼핑몰</h1>
+		</div>
+	</div>
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Shop</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">New<span class="sr-only"></span></a></li>
+					<li><a href="#">Best</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cartegory<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Man</a></li>
+							<li><a href="#">Women</a></li>
+							<li><a href="#">Shoes</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- <table>
 		<tr th:each="list : ${CommentList}">
 			<td th:text="${list.comment_no}"></td>
 			<td th:text="${list.text}"></td>
 			<td th:text="${list.datetime}"></td>
 		</tr>
 	</table>
-	<!-- 입력 -->
+	
 	<form id="comment-insert" method="post" action="/SimpleComment/Insert">
 		<input type="text" name="text" placeholder="내용"/>
 		<input type="submit" value="입력" />
 	</form>
-	jenkins auto distribute test
+	jenkins auto distribute test -->
 </body>
 </html>
