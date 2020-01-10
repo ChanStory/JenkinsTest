@@ -23,7 +23,7 @@ public class CommonController {
 	
 	@RequestMapping("/")
 	public String common() {
-		return "redirect:/SimpleComment/";
+		return "common/main";
 	}
 	
 	@RequestMapping("/jpatest/")
@@ -51,7 +51,7 @@ public class CommonController {
 
         emf.close(); //엔티티 매니저 팩토리 종료
         
-		return "SimpleComment/jpaTest";
+		return "jpa/jpaTest";
 	}
 	
 	
