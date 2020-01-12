@@ -3,148 +3,15 @@
 <head>
 
 <meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>shop</title>
+<title>test</title>
 
-
-
-<link rel="stylesheet" th:href="@{/css/jquery.mobile-1.4.5.min.css}">
-<style>
-.sidenav {
-  height: 100%; /* 100% Full-height */
-  width: 0%; /* 0 width - change this with JavaScript */
-  position: fixed; /* Stay in place */
-  z-index: 9001; /* Stay on top */
-  top: 0; /* Stay at the top */
-  left: 0;
-  background-color: #ffffff; /* Black*/
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
-  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-}
-
-/* The navigation menu links */
-.sidenav a {
-  padding: 0px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #000000;
-  display: block;
-  transition: 0.5s;
-}
-
-/* When you mouse over the navigation links, change their color */
-.sidenav a:hover {
-  color: #f1f1f1;
-}
-
-/* Position and style the close button (top right corner) */
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 20px;
-  margin-left: 50px;
-}
-
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-  transition: margin-left .5s;
-  padding: 20px;
-}
-
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-
-#mask {  
-  position:absolute;  
-  left:0;
-  top:0;
-  z-index:9000;  
-  background-color:#000;  
-  display:none;  
-}
-</style>
-<script th:src="@{/js/jquery-1.12.4.min.js}"></script>
-<script th:src="@{/js/jquery.mobile-1.4.5.min.js}"></script>
-<script>
-function openNav() {
-	$('#mySidenav').css('width', '70%');
-	wrapWindowByMask();
-  /* document.getElementById("mySidenav").style.width = "250px";
-  document.getElementById("page1").style.marginLeft = "250px";
-  document.body.style.backgroundColor = "rgba(255,255,255,0.4)"; */
-}
-
-/* Set the width of the side navigation to 0 */
-function closeNav() {
-	$('#mySidenav').css('width', '0px');
-	
-  /* document.getElementById("mySidenav").style.width = "0";
-  document.getElementById("page1").style.marginLeft = "0";
-  document.body.style.backgroundColor = "white"; */
-}
-
-function wrapWindowByMask(){
-    //화면의 높이와 너비를 구한다.
-    var maskHeight = $(document).height();  
-    var maskWidth = $(window).width();  
-	
-    //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
-    $('#mask').css({'width':maskWidth,'height':maskHeight});  
-	
-    //애니메이션 효과  
-    $('#mask').fadeTo('fast', 0.8);    
-}
-
-$( document ).ready(function() {
-	$('.closebtn').click(function (e) {  
-	    //링크 기본동작은 작동하지 않도록 한다.
-	    e.preventDefault();
-	    $('#mask').fadeOut('fast');
-	    closeNav();
-	});       
-	
-	//검은 막을 눌렀을 때
-	$('#mask').click(function () {
-		$('#mask').fadeOut('fast');
-		
-	    closeNav();
-	});
-});
-</script>
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+<script src="js/app.js" type="text/babel"></script> 
 
 </head>
 <body>
-	<div id="mySidenav" class="sidenav">
-		<a href="#">About</a>
-		<a href="#">Services</a>
-		<a href="#">Clients</a>
-		<a href="#">Contact</a>
-	</div>
-	
-	
-	<div data-role="page" id="page" data-title="shop">
-		<div data-role="header">
-			<a href="javascript:openNav()" class="openbtn" onclick="javascript:openNav()">menu</a>
-			<h1>header</h1>
-		</div>
-		
-		<div class="content" data-role="content">
-			
-		</div>	
-		<div class="content" data-role="content">
-	        <p>1 page</p>
-	    </div>
-		<footer data-role="footer"><h1>footer</h1></footer>
-
-	</div>
-	<div id="mask">
-		<a href="javascript:closeNav()" class="closebtn" onclick="javascript:closeNav()">&times;</a>
-	</div>
+    <div id="root"></div>
 </body>
 </html>
