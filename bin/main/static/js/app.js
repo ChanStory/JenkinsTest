@@ -1,4 +1,22 @@
-ReactDOM.render(
-  <h1>Hello, world!</h1>,
-  document.getElementById('root')
-);
+class Codelab extends React.Component{
+	render(){
+		let text = 'Hello';
+		let style = {
+			backgroundColor:'aqua'
+		};
+		
+		return(
+			<div style={style}>{text}</div>
+		);
+	}
+}
+
+class App extends React.Component{
+	render(){
+		return(
+			<Codelab/>
+		);
+	}
+}
+
+ReactDOM.render(<App/>, document.getElementById('root'));
