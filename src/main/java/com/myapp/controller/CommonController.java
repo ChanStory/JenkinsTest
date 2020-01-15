@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,9 +18,13 @@ import com.myapp.jpa.Orders;
 import com.myapp.jpa.Period;
 import com.myapp.jpa.Product;
 import com.myapp.jpa.Team;
+import com.myapp.jpaRepository.MemberRepository;
 
 @Controller
 public class CommonController {
+	
+	@Autowired
+	private MemberRepository memberRepository;
 	
 	@RequestMapping("/")
 	public String common() {
@@ -29,28 +34,44 @@ public class CommonController {
 	@RequestMapping("/jpatest/")
 	public String jpaTest() {
 		
-		//엔티티 매니저 팩토리 생성
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("myapp");
-        EntityManager em = emf.createEntityManager(); //엔티티 매니저 생성
-
-        EntityTransaction tx = em.getTransaction(); //트랜잭션 기능 획득
-
-        try {
-
-
-            tx.begin(); //트랜잭션 시작
-            embeddedLogic(em);  //비즈니스 로직
-            tx.commit();//트랜잭션 커밋
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            tx.rollback(); //트랜잭션 롤백
-        } finally {
-            em.close(); //엔티티 매니저 종료
-        }
-
-        emf.close(); //엔티티 매니저 팩토리 종료
+		Member member = new Member();
+        member.setUsername("태찬");
+        member.setAge(25);
         
+        Period period = new Period();
+        period.setStartDate(new Date());
+        
+        Address address = new Address();
+        address.setCity("부천시");
+        address.setStreet("계남로 196");
+        
+        member.setWorkPeriod(period);
+        member.setHomeAddress(address);
+        
+        memberRepository.save(member);
+        //em.persist(member);
+        
+        Optional<Member> findMember = memberRepository.findById((long) 1);
+        
+        System.out.println("findMember startDate : " + findMember.get().getWorkPeriod().getStartDate());
+        System.out.println("findMember address : " + findMember.get().getHomeAddress().getCity() + " " + findMember.get().getHomeAddress().getStreet());
+		/*
+		 * //엔티티 매니저 팩토리 생성 EntityManagerFactory emf =
+		 * Persistence.createEntityManagerFactory("myapp"); EntityManager em =
+		 * emf.createEntityManager(); //엔티티 매니저 생성
+		 * 
+		 * EntityTransaction tx = em.getTransaction(); //트랜잭션 기능 획득
+		 * 
+		 * try {
+		 * 
+		 * 
+		 * tx.begin(); //트랜잭션 시작 embeddedLogic(em); //비즈니스 로직 tx.commit();//트랜잭션 커밋
+		 * 
+		 * } catch (Exception e) { e.printStackTrace(); tx.rollback(); //트랜잭션 롤백 }
+		 * finally { em.close(); //엔티티 매니저 종료 }
+		 * 
+		 * emf.close(); //엔티티 매니저 팩토리 종료
+		 */        
 		return "jpa/jpaTest";
 	}
 	
