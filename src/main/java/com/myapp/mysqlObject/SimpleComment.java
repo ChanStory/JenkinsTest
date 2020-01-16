@@ -26,7 +26,7 @@ public class SimpleComment implements Serializable
 	@Column(nullable = false)
 	private String text;
 
-	@Column(insertable = false, updatable = false)
+	@Column(updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date datetime;
 
