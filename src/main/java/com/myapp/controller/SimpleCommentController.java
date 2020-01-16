@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.myapp.jpa.SimpleComment;
-import com.myapp.jpaRepository.SimpleCommentRepository;
+import com.myapp.repository.mysqlRepository.SimpleCommentRepository;
 
 @Controller
 public class SimpleCommentController

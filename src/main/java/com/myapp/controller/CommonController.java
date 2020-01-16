@@ -18,7 +18,7 @@ import com.myapp.jpa.Orders;
 import com.myapp.jpa.Period;
 import com.myapp.jpa.Product;
 import com.myapp.jpa.Team;
-import com.myapp.jpaRepository.MemberRepository;
+import com.myapp.repository.h2Repository.MemberRepository;
 
 @Controller
 public class CommonController {

@@ -1,4 +1,4 @@
-package com.myapp.jpaRepository;
+package com.myapp.repository.h2Repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

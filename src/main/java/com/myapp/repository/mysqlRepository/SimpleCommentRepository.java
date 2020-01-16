@@ -1,4 +1,4 @@
-package com.myapp.jpaRepository;
+package com.myapp.repository.mysqlRepository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
