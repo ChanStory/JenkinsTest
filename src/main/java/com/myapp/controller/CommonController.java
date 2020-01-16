@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.myapp.jpa.Address;
-import com.myapp.jpa.Book;
-import com.myapp.jpa.Member;
-import com.myapp.jpa.Orders;
-import com.myapp.jpa.Period;
-import com.myapp.jpa.Product;
-import com.myapp.jpa.Team;
+import com.myapp.h2Object.Address;
+import com.myapp.h2Object.Book;
+import com.myapp.h2Object.Member;
+import com.myapp.h2Object.Orders;
+import com.myapp.h2Object.Period;
+import com.myapp.h2Object.Product;
+import com.myapp.h2Object.Team;
 import com.myapp.repository.h2Repository.MemberRepository;
 
 @Controller

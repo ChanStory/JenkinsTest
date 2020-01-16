@@ -1,4 +1,4 @@
-package com.myapp.jpa;
+package com.myapp.h2Object;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -7,8 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@DiscriminatorValue("A")
+@DiscriminatorValue("M")
 @Getter @Setter
-public class Album extends Item{
-	private String artist;
+public class Movie extends Item{
+	private String director;
+	private String actor;
 }

@@ -1,7 +1,6 @@
-package com.myapp.jpa;
+package com.myapp.h2Object;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,16 +9,18 @@ import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter @Setter
-public class Product {
+public class Team {
+	
 	@Id
-	@Column(name = "PRODUCT_ID")
+	@Column(name = "TEAM_ID")
 	private String id;
 	
 	private String name;
 	
-	@OneToMany(mappedBy = "product")
-    private List<Orders> orders = new ArrayList<Orders>();
+	@OneToMany(mappedBy = "team")
+	private List<Member> members = new ArrayList<Member>();
 }

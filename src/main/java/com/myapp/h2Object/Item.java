@@ -1,4 +1,4 @@
-package com.myapp.jpa;
+package com.myapp.h2Object;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;

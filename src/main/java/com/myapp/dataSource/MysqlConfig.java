@@ -33,13 +33,13 @@ public class MysqlConfig {
 	public LocalContainerEntityManagerFactoryBean mysqlEntityManager() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(mysqlDataSource());
-		em.setPackagesToScan(new String[] { "com.myapp.jpa" });
+		em.setPackagesToScan(new String[] { "com.myapp.mysqlObject" });
 
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);
 		HashMap<String, Object> properties = new HashMap<>();
-		properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-		properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+		properties.put("hibernate.hbm2ddl.auto", env.getProperty("spring.jpa.hibernate.ddl-auto"));
+		properties.put("hibernate.dialect", env.getProperty("datasource.mysql.dialect"));
 		em.setJpaPropertyMap(properties);
 
 		return em;
@@ -52,8 +52,9 @@ public class MysqlConfig {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName(env.getProperty("datasource.mysql.driverClassName"));
 		dataSource.setUrl(env.getProperty("datasource.mysql.url"));
-		dataSource.setUsername(env.getProperty("datasource.mysql.user"));
-		dataSource.setPassword(env.getProperty("datasource.mysql.pass"));
+		dataSource.setUsername(env.getProperty("datasource.mysql.username"));
+		dataSource.setPassword(env.getProperty("datasource.mysql.password"));
+		System.out.println("mysql data Source url : " + dataSource.getUrl() + ", userName : " + dataSource.getUsername() + ", password : " + dataSource.getPassword());
 		return dataSource;
 	}
 

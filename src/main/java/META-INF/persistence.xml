@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence">	
 	<persistence-unit name="myapp">
-		<class>com.myapp.jpa.Member</class>
-		<class>com.myapp.jpa.SimpleComment</class>
-		<class>com.myapp.jpa.Team</class>
-		<class>com.myapp.jpa.Product</class>
-		<class>com.myapp.jpa.Orders</class>
-		<class>com.myapp.jpa.Item</class>
-		<class>com.myapp.jpa.Album</class>
-		<class>com.myapp.jpa.Movie</class>
-		<class>com.myapp.jpa.Book</class>
-		<class>com.myapp.jpa.Period</class>
-		<class>com.myapp.jpa.Address</class>
+		<class>com.myapp.h2Object.Member</class>
+		<class>com.myapp.mysqlObject.SimpleComment</class>
+		<class>com.myapp.h2Object.Team</class>
+		<class>com.myapp.h2Object.Product</class>
+		<class>com.myapp.h2Object.Orders</class>
+		<class>com.myapp.h2Object.Item</class>
+		<class>com.myapp.h2Object.Album</class>
+		<class>com.myapp.h2Object.Movie</class>
+		<class>com.myapp.h2Object.Book</class>
+		<class>com.myapp.h2Object.Period</class>
+		<class>com.myapp.h2Object.Address</class>
         <properties>
 			
             <!-- 필수 속성 -->

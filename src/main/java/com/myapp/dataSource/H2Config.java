@@ -34,14 +34,13 @@ public class H2Config {
 	public LocalContainerEntityManagerFactoryBean h2EntityManager() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(h2DataSource());
-		em.setPackagesToScan(new String[] { "com.myapp.jpa" });
+		em.setPackagesToScan(new String[] { "com.myapp.h2Object" });
 
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);
 		HashMap<String, Object> properties = new HashMap<>();
-		properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-		//properties.put("hibernate.dialect", env.getProperty("hibernate.h2.dialect"));
-		properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+		properties.put("hibernate.hbm2ddl.auto", env.getProperty("spring.jpa.hibernate.ddl-auto"));
+		properties.put("hibernate.dialect", env.getProperty("datasource.h2.dialect"));
 		em.setJpaPropertyMap(properties);
 
 		return em;
@@ -55,8 +54,9 @@ public class H2Config {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName(env.getProperty("datasource.h2.driverClassName"));
 		dataSource.setUrl(env.getProperty("datasource.h2.url"));
-		dataSource.setUsername(env.getProperty("datasource.h2.user"));
-		dataSource.setPassword(env.getProperty("datasource.h2.pass"));
+		dataSource.setUsername(env.getProperty("datasource.h2.username"));
+		dataSource.setPassword(env.getProperty("datasource.h2.password"));
+		System.out.println("h2 data Source url : " + dataSource.getUrl() + ", userName : " + dataSource.getUsername() + ", password : " + dataSource.getPassword());
 		return dataSource;
 	}
 

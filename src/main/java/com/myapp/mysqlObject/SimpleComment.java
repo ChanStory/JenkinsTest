@@ -1,4 +1,4 @@
-package com.myapp.jpa;
+package com.myapp.mysqlObject;
 
 import java.io.Serializable;
 import java.util.Date;
