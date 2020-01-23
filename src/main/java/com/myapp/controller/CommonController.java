@@ -31,6 +31,11 @@ public class CommonController {
 		return "common/main";
 	}
 	
+	@RequestMapping("/react")
+	public String react() {
+		return "common/react";
+	}
+	
 	@RequestMapping("/jpatest/")
 	public String jpaTest() {
 		
