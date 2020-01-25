@@ -9,6 +9,7 @@ import javax.persistence.Persistence;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.myapp.h2Object.Address;
@@ -20,6 +21,7 @@ import com.myapp.h2Object.Product;
 import com.myapp.h2Object.Team;
 import com.myapp.repository.h2Repository.MemberRepository;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Controller
 public class CommonController {
 	
