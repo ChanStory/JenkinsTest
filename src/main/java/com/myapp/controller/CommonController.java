@@ -12,14 +12,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.myapp.h2Object.Address;
-import com.myapp.h2Object.Book;
-import com.myapp.h2Object.Member;
-import com.myapp.h2Object.Orders;
-import com.myapp.h2Object.Period;
-import com.myapp.h2Object.Product;
-import com.myapp.h2Object.Team;
-import com.myapp.repository.h2Repository.MemberRepository;
+import com.myapp.mysqlObject.Address;
+import com.myapp.mysqlObject.Book;
+import com.myapp.mysqlObject.Member;
+import com.myapp.mysqlObject.Orders;
+import com.myapp.mysqlObject.Period;
+import com.myapp.mysqlObject.Product;
+import com.myapp.mysqlObject.Team;
+import com.myapp.repository.mysqlRepository.MemberRepository;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @Controller
