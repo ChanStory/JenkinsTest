@@ -33,7 +33,7 @@ public class Orders {
 	
 	@ManyToOne
 	@JoinColumn(name = "MEMBER_ID")
-	private Member member;
+	private User member;
 	
 	@ManyToOne
 	@JoinColumn(name = "PRODUCT_ID")
@@ -44,13 +44,7 @@ public class Orders {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date orderDate;
 	
-	public void setMember(Member member) {
-    	if(this.member != null) {
-    		this.member.getOrders().remove(this);
-    	}
-    	this.member = member;
-    	member.getOrders().add(this);
-    }
+	
 	
 	public void setProduct(Product product) {
     	if(this.product != null) {

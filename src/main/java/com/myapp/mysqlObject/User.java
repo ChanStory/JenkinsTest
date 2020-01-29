@@ -40,18 +40,18 @@ import lombok.Setter;
 		sequenceName = "MEMBER_SEQ",
 		initialValue = 1, allocationSize = 1
 		)
-public class Member {
+public class User {
 
     @Id
-    @Column(name = "MEMBER_ID")
+    @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
     				generator = "MEMBER_SEQ_GENERATOR")
     private Long id;
 
-    @Column(name = "NAME", nullable = false, length = 10)
+    @Column(name = "NAME", nullable = false)
     private String username;
 
-    private Integer age;
+    private String regNum;
     
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
@@ -65,12 +65,6 @@ public class Member {
     @Lob
     private String description;
     
-    @OneToMany(mappedBy = "member")
-    private List<Orders> orders = new ArrayList<Orders>();
-    
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
     
     @Embedded
     Period workPeriod;
@@ -78,11 +72,4 @@ public class Member {
     @Embedded
     Address homeAddress;
     
-    public void setTeam(Team team) {
-    	if(this.team != null) {
-    		this.team.getMembers().remove(this);
-    	}
-    	this.team = team;
-    	team.getMembers().add(this);
-    }
 }
