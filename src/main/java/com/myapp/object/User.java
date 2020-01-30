@@ -1,4 +1,4 @@
-package com.myapp.mysqlObject;
+package com.myapp.object;
 
 import java.util.*;
 
@@ -10,10 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,33 +22,20 @@ import com.myapp.common.RoleType;
 
 import lombok.Getter;
 import lombok.Setter;
-/**
- * User: HolyEyE
- * Date: 13. 5. 24. Time: 오후 7:43
- */
+
 @Entity
 @Getter @Setter
-@Table(name="MEMBER", uniqueConstraints = {@UniqueConstraint(
-		name = "ID_UNIQUE",
-		columnNames = "MEMBER_ID")}
-		)
-@SequenceGenerator(
-		name = "MEMBER_SEQ_GENERATOR",
-		sequenceName = "MEMBER_SEQ",
-		initialValue = 1, allocationSize = 1
-		)
 public class User {
 
     @Id
     @Column(name = "USER_ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-    				generator = "MEMBER_SEQ_GENERATOR")
-    private Long id;
+    private String id;
 
     @Column(name = "NAME", nullable = false)
     private String username;
-
-    private String regNum;
+    
+    @Column(nullable = false)
+    private String birthDate;
     
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
@@ -62,14 +46,9 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModifiedDate;
     
-    @Lob
-    private String description;
+    private String address;
     
+    private String phoneNumber;
     
-    @Embedded
-    Period workPeriod;
-    
-    @Embedded
-    Address homeAddress;
-    
+    private String email;
 }

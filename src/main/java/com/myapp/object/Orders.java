@@ -1,4 +1,4 @@
-package com.myapp.mysqlObject;
+package com.myapp.object;
 
 import java.util.Date;
 
@@ -35,22 +35,9 @@ public class Orders {
 	@JoinColumn(name = "MEMBER_ID")
 	private User member;
 	
-	@ManyToOne
-	@JoinColumn(name = "PRODUCT_ID")
-	private Product product;
-	
 	private int orderAmount;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date orderDate;
 	
-	
-	
-	public void setProduct(Product product) {
-    	if(this.product != null) {
-    		this.product.getOrders().remove(this);
-    	}
-    	this.product = product;
-    	product.getOrders().add(this);
-    }
 }

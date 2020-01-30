@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.myapp.repository.mysqlRepository.MemberRepository;
+import com.myapp.repository.UserRepository;
 import com.myapp.service.LoginService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -19,18 +19,12 @@ public class ApiController {
 	@Autowired
 	LoginService loginService;
 	
-	@Autowired
-	private MemberRepository memberRepository;
 	
-	@RequestMapping("/rest")
-	public JSONObject restTest() {
-		JSONObject jsonObject = new JSONObject();
+	
+	@RequestMapping("/id-duplicate")
+	public JSONObject idDuplicateCheck(@RequestParam Map params) {
 		
-		jsonObject.put("test", "Hello");
-		/*
-		 * JSONArray req_array = new JSONArray(); req_array.add(jsonObject);
-		 */
-		return jsonObject;
+		return loginService.idDuplicateCheck((String) params.get("joinId"));
 	}
 	
 	@RequestMapping("/login")
