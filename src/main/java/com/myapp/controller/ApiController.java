@@ -40,8 +40,9 @@ public class ApiController {
 	}
 	
 	@RequestMapping("/join")
-	public JSONObject join(@RequestBody String body, HttpServletRequest request) {
+	public JSONObject join(@RequestBody String body) {
 		JoinData joinData = null;
+		
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			joinData = mapper.readValue(body, JoinData.class);
