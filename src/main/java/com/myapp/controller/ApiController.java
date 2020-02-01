@@ -1,14 +1,13 @@
 package com.myapp.controller;
 
-import java.io.IOException;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,12 +40,11 @@ public class ApiController {
 	}
 	
 	@RequestMapping("/join")
-	public JSONObject join(HttpServletRequest request) {
+	public JSONObject join(@RequestBody String body, HttpServletRequest request) {
 		JoinData joinData = null;
-		
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			joinData = mapper.readValue(request.getReader().lines().collect(Collectors.joining()), JoinData.class);
+			joinData = mapper.readValue(body, JoinData.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
