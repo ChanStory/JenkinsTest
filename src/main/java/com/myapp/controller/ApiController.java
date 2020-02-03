@@ -2,8 +2,6 @@ package com.myapp.controller;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,44 +10,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.myapp.dto.JoinData;
 import com.myapp.service.LoginService;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")//크로스 도메인 해결을 위한 어노테이션
 @RestController
 public class ApiController {
 
 	@Autowired
 	LoginService loginService;
 	
-	
-	
 	@RequestMapping("/id-duplicate")
 	public JSONObject idDuplicateCheck(@RequestParam Map params) {
-		
 		return loginService.idDuplicateCheck((String) params.get("joinId"));
 	}
 	
 	@RequestMapping("/login")
-	public JSONObject login() {
-		JSONObject jsonObject = new JSONObject();
-		
-		jsonObject.put("test", "Hello");
-		return jsonObject;
+	public JSONObject login(@RequestBody Map body) {
+		return loginService.login(body);
 	}
 	
 	@RequestMapping("/join")
-	public JSONObject join(@RequestBody String body) {
-		JoinData joinData = null;
-		
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			joinData = mapper.readValue(body, JoinData.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return loginService.join(joinData);
+	public JSONObject join(@RequestBody Map body) {
+		return loginService.join(body);
 	}
 }
