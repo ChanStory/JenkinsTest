@@ -26,7 +26,7 @@ import lombok.Setter;
 @Entity
 @Getter @Setter
 public class User {
-
+	
     @Id
     @Column(name = "USER_ID")
     private String id;
@@ -53,4 +53,28 @@ public class User {
     private String phoneNumber;
     
     private String email;
+    
+    
+    public User() {
+    	Date nowDate = new Date();
+    	
+    	roleType = RoleType.USER;
+    	createdDate = nowDate;
+    	lastModifiedDate = nowDate;
+    }
+    
+    public User(Map<String, String> userMap) {
+    	Date nowDate = new Date();
+    	
+    	id = userMap.get("joinId");
+    	password = userMap.get("joinPassword");
+    	username = userMap.get("name");
+    	birthDate = userMap.get("birthDate");
+    	address = userMap.get("address");
+    	phoneNumber = userMap.get("phoneNumber");
+    	email = userMap.get("email");
+    	roleType = RoleType.USER;
+    	createdDate = nowDate;
+    	lastModifiedDate = nowDate;
+    }
 }

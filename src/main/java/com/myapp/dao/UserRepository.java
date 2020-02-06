@@ -1,4 +1,4 @@
-package com.myapp.repository;
+package com.myapp.dao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.myapp.object.User;

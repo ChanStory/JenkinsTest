@@ -1,6 +1,5 @@
 package com.myapp.service;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -8,20 +7,29 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.myapp.common.RoleType;
+import com.myapp.dao.UserRepository;
 import com.myapp.object.User;
-import com.myapp.repository.UserRepository;
 
+
+/**
+ * 로그인 관련 서비스
+ * @author chans
+ */
 @Service
 public class LoginService {
 
 	@Autowired
 	private UserRepository userRepository;
 	
-	public JSONObject login(Map<String, String> map) {
+	/**
+	 * 로그인
+	 * @param loginMap
+	 * @return resultJson
+	 */
+	public JSONObject login(Map<String, String> loginMap) {
 		JSONObject resultJson = new JSONObject();
-		String id = map.get("loginId");
-		String password = map.get("loginPassword");
+		String id = loginMap.get("loginId");
+		String password = loginMap.get("loginPassword");
 		
 		User user = userRepository.findById(id).orElse(null);
 		
@@ -39,33 +47,29 @@ public class LoginService {
 		return resultJson;
 	}
 	
-	public JSONObject join(Map<String, String> map) {
-		JSONObject resultJson = new JSONObject();
-		
-		Date nowDate = new Date();
-		
-		User joinUser = new User();
-		joinUser.setId(map.get("joinId"));
-		joinUser.setUsername(map.get("name"));
-		joinUser.setPassword(map.get("joinPassword"));
-		joinUser.setBirthDate(map.get("birthDate"));
-		joinUser.setPhoneNumber(map.get("phoneNumber"));
-		joinUser.setAddress(map.get("address"));
-		joinUser.setEmail(map.get("email"));
-		joinUser.setRoleType(RoleType.USER);
-		joinUser.setCreatedDate(nowDate);
-		joinUser.setLastModifiedDate(nowDate);
-		
+	/**
+	 * 회원가입
+	 * @param userMap
+	 * @return resultJson
+	 */
+	public JSONObject join(Map<String, String> userMap) {
+		User joinUser = new User(userMap);
 		userRepository.save(joinUser);
 		
+		JSONObject resultJson = new JSONObject();
 		resultJson.put("result", "success");
 		
 		return resultJson;
 	}
 	
-	public JSONObject idDuplicateCheck(String id) {
+	/**
+	 * id 중복체크
+	 * @param idString
+	 * @return resultJson
+	 */
+	public JSONObject idDuplicateCheck(String idString) {
 		JSONObject resultJson = new JSONObject();
-		Optional<User> userOptional = userRepository.findById(id);
+		Optional<User> userOptional = userRepository.findById(idString);
 		
 		if(userOptional.isPresent()) {
 			resultJson.put("duplicateResult", "canNotUsed");
