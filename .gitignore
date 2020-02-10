@@ -32,4 +32,7 @@ out/
 .vscode/
 
 
-node_modules
+.metadata
+.settings
+/.classpath
+/.project
