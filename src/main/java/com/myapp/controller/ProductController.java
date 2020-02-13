@@ -27,7 +27,7 @@ public class ProductController {
 	 * @return resultJson
 	 */
 	@PostMapping("/")
-	public JSONObject join(@RequestBody Map body) {
+	public JSONObject addProduct(@RequestBody Map body) {
 		return productService.addProduct(body);
 	}
 }
