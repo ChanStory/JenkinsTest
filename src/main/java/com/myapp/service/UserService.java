@@ -12,11 +12,11 @@ import com.myapp.object.User;
 
 
 /**
- * 로그인 관련 서비스
+ * 유저 관련 서비스
  * @author chans
  */
 @Service
-public class LoginService {
+public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -31,6 +31,7 @@ public class LoginService {
 		String id = loginMap.get("loginId");
 		String password = loginMap.get("loginPassword");
 		
+		//user객체를 id로 검색 없을 시 null
 		User user = userRepository.findById(id).orElse(null);
 		
 		if(user != null) {
