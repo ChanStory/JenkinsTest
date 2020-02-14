@@ -1,9 +1,9 @@
 package com.myapp.object;
 
 import java.util.Date;
-import java.util.Map;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,8 +14,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
-import com.myapp.common.RoleType;
+import lombok.Getter;
+import lombok.Setter;
 
+@Entity
+@Getter @Setter
 @Table(name="PRODUCT", uniqueConstraints = {@UniqueConstraint(
 		name = "ID_UNIQUE",
 		columnNames = "PRODUCT_ID")}
@@ -40,13 +43,23 @@ public class Product {
     private int price;
     
     @Lob
-    private byte[] image;
+    private String description;
+    
+    @Column(name = "imageName")
+    private String imageName;
+    
+    @Column(name = "division")
+    private String division;
+    
+    @Column(name = "brand")
+    private String brand;
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModifiedDate;
+    
     
     public Product() {
     	Date nowDate = new Date();
