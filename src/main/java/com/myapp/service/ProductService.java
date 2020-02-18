@@ -24,7 +24,7 @@ public class ProductService {
 	
 	/**
 	 * 상품추가
-	 * @param productMap
+	 * @param 
 	 * @return resultJson
 	 */
 	public JSONObject addProduct() {
@@ -42,11 +42,30 @@ public class ProductService {
 		return new JSONObject();
 	}
 
-
+	/**
+	 * 상품 전체 조회
+	 * @param 
+	 * @return resultJson
+	 */
 	public JSONObject findAllProduct() {
 		JSONObject jsonResult = new JSONObject();
 		
 		List<Product> productList = productRepository.findAll();
+		
+		jsonResult.put("productList", productList);
+		System.out.println(jsonResult);
+		return jsonResult;
+	}
+
+	/**
+	 * 조건부 상품 조회
+	 * @param String
+	 * @return resultJson
+	 */
+	public JSONObject findProducts(String condition) {
+		JSONObject jsonResult = new JSONObject();
+		
+		List<Product> productList = productRepository.findByDivision(condition);
 		
 		jsonResult.put("productList", productList);
 		System.out.println(jsonResult);

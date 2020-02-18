@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,13 +29,24 @@ public class ProductController {
 	
 	/**
 	 * 전체상품 조회
-	 * @param body
+	 * @param 
 	 * @return resultJson
 	 */
 	@GetMapping("/products")
 	public JSONObject findAllProdect() {
 		
 		return productService.findAllProduct();
+	}
+	
+	/**
+	 * 조건부 상품 조회
+	 * @param condition
+	 * @return resultJson
+	 */
+	@GetMapping("/products/{condition}")
+	public JSONObject findProdects(@PathVariable String condition) {
+		
+		return productService.findProducts(condition);
 	}
 	
 	/**

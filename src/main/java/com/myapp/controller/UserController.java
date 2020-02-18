@@ -30,7 +30,7 @@ public class UserController {
 	
 	/**
 	 * id 중복체크
-	 * @param params
+	 * @param id
 	 * @return resultJson
 	 */
 	@GetMapping("/id-duplicate/{id}")
