@@ -48,8 +48,8 @@ public class Product {
     @Column(name = "imageName")
     private String imageName;
     
-    @Column(name = "division")
-    private String division;
+    @Column(name = "kind")
+    private String kind;
     
     @Column(name = "brand")
     private String brand;

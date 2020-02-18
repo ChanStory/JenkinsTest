@@ -33,7 +33,7 @@ public class ProductService {
 		product.setName("AMD 라이젠 5 2600 (피나클 릿지)");
 		product.setPrice(133390);
 		product.setImageName("imageTest2.jpg");
-		product.setDivision("cpu");
+		product.setKind("cpu");
 		product.setDescription("AMD 라이젠 5 2600 (피나클 릿지) 입니다.");
 		product.setBrand("AMD");
 		
@@ -62,10 +62,21 @@ public class ProductService {
 	 * @param String
 	 * @return resultJson
 	 */
-	public JSONObject findProducts(String condition) {
+	public JSONObject findProducts(String condition, String item) {
 		JSONObject jsonResult = new JSONObject();
+		List<Product> productList = null;
 		
-		List<Product> productList = productRepository.findByDivision(condition);
+		if(condition.equals("kind")) {
+			productList = productRepository.findByKind(item);
+			
+		}else if(condition.equals("count")) {
+			productList = productRepository.findAllByOrderByCreatedDateDesc();
+			
+			//조회된 productList 의 개수가 요청한 개수보다 많을경우 요청한 개수만큼만 반환해줌
+			if(Integer.parseInt(item) < productList.size()) {
+				productList = productList.subList(0, Integer.parseInt(item));
+			}
+		}
 		
 		jsonResult.put("productList", productList);
 		System.out.println(jsonResult);

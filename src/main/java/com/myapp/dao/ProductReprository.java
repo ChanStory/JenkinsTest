@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.myapp.object.Product;
 public interface ProductReprository extends JpaRepository<Product, Long>
 {
-	List<Product> findByDivision(String division);
+	List<Product> findByKind(String kind);
+	List<Product> findAllByOrderByCreatedDateDesc();
 }

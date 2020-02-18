@@ -43,10 +43,10 @@ public class ProductController {
 	 * @param condition
 	 * @return resultJson
 	 */
-	@GetMapping("/products/{condition}")
-	public JSONObject findProdects(@PathVariable String condition) {
+	@GetMapping("/products/{condition}/{item}")
+	public JSONObject findProdects(@PathVariable String condition, @PathVariable String item) {
 		
-		return productService.findProducts(condition);
+		return productService.findProducts(condition, item);
 	}
 	
 	/**
