@@ -15,46 +15,47 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.myapp.service.UserService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+
 
 /**
  * 유저 관련 컨트롤러
  * @author chans
  */
+@Api(tags = {"1. User"})
 @CrossOrigin(origins = "*", allowedHeaders = "*")//크로스 도메인 해결을 위한 어노테이션
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
+@RequestMapping("/v1")
 public class UserController {
 
-	@Autowired
-	private UserService loginService;
 	
-	/**
-	 * id 중복체크
-	 * @param id
-	 * @return resultJson
-	 */
+	private final UserService userService;
+	
+	
+	@ApiOperation(value = "ID 중복체크", notes = "가입하려는 ID의 중복을 체크한다")
 	@GetMapping("/id-duplicate/{id}")
 	public JSONObject idDuplicateCheck(@PathVariable String id) {
-		return loginService.idDuplicateCheck(id);
+		return userService.idDuplicateCheck(id);
 	}
 	
-	/**
-	 * 로그인
-	 * @param params
-	 * @return resultJson
-	 */
+	@ApiOperation(value = "로그인", notes = "로그인을 한다")
 	@GetMapping("/login")
 	public JSONObject login(@RequestParam Map params) {
-		return loginService.login(params);
+		return userService.login(params);
 	}
 	
-	/**
-	 * 회원가입
-	 * @param body
-	 * @return resultJson
-	 */
+	@ApiOperation(value = "회원 전체조회", notes = "모든 회원을 조회한다")
+	@GetMapping("/user")
+	public JSONObject findAllUsers() {
+		return userService.findAllUsers();
+	}
+	
+	@ApiOperation(value = "회원 가입", notes = "회원을 입력한다")
 	@PostMapping("/user")
 	public JSONObject join(@RequestBody Map body) {
-		return loginService.join(body);
+		return userService.join(body);
 	}
 }

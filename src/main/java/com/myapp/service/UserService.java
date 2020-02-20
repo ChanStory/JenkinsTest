@@ -32,18 +32,15 @@ public class UserService {
 		String password = loginMap.get("loginPassword");
 		
 		//user객체를 id로 검색 없을 시 null
-		User user = userRepository.findById(id).orElse(null);
-		
-		if(user != null) {
-			if(user.getPassword().equals(password)) {
-				resultJson.put("result", "success");
-			}else {
-				resultJson.put("result", "notMatch");
-			}
-			
-		}else {
-			resultJson.put("result", "doesNotExist");
-		}
+		/*
+		 * User user = userRepository.findById(id).orElse(null);
+		 * 
+		 * if(user != null) { if(user.getPassword().equals(password)) {
+		 * resultJson.put("result", "success"); }else { resultJson.put("result",
+		 * "notMatch"); }
+		 * 
+		 * }else { resultJson.put("result", "doesNotExist"); }
+		 */
 		
 		return resultJson;
 	}
@@ -54,7 +51,7 @@ public class UserService {
 	 * @return resultJson
 	 */
 	public JSONObject join(Map<String, String> userMap) {
-		User joinUser = new User(userMap);
+		User joinUser = new User();
 		userRepository.save(joinUser);
 		
 		JSONObject resultJson = new JSONObject();
@@ -70,14 +67,18 @@ public class UserService {
 	 */
 	public JSONObject idDuplicateCheck(String idString) {
 		JSONObject resultJson = new JSONObject();
-		Optional<User> userOptional = userRepository.findById(idString);
-		
-		if(userOptional.isPresent()) {
-			resultJson.put("duplicateResult", "canNotUsed");
-		}else {
-			resultJson.put("duplicateResult", "available");
-		}
+		/*
+		 * Optional<User> userOptional = userRepository.findById(idString);
+		 * 
+		 * if(userOptional.isPresent()) { resultJson.put("duplicateResult",
+		 * "canNotUsed"); }else { resultJson.put("duplicateResult", "available"); }
+		 */
 
 		return resultJson;
+	}
+
+	public JSONObject findAllUsers() {
+		
+		return null;
 	}
 }
