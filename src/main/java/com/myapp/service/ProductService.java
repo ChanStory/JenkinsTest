@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.myapp.advice.exception.CUserNotFoundException;
 import com.myapp.dao.ProductReprository;
 import com.myapp.object.Product;
 
@@ -46,14 +47,17 @@ public class ProductService {
 	 * 상품 전체 조회
 	 * @param 
 	 * @return resultJson
+	 * @throws Exception 
 	 */
-	public JSONObject findAllProduct() {
+	public JSONObject findAllProduct() throws Exception {
+		if(true) {
+			throw new CUserNotFoundException("message");
+		}
 		JSONObject jsonResult = new JSONObject();
 		
 		List<Product> productList = productRepository.findAll();
 		
 		jsonResult.put("productList", productList);
-		System.out.println(jsonResult);
 		return jsonResult;
 	}
 
@@ -62,19 +66,19 @@ public class ProductService {
 	 * @param String
 	 * @return resultJson
 	 */
-	public JSONObject findProducts(String condition, String item) {
+	public JSONObject findProducts(String condition, String value) {
 		JSONObject jsonResult = new JSONObject();
 		List<Product> productList = null;
 		
 		if(condition.equals("kind")) {
-			productList = productRepository.findByKind(item);
+			productList = productRepository.findByKind(value);
 			
 		}else if(condition.equals("count")) {
 			productList = productRepository.findAllByOrderByCreatedDateDesc();
 			
 			//조회된 productList 의 개수가 요청한 개수보다 많을경우 요청한 개수만큼만 반환해줌
-			if(Integer.parseInt(item) < productList.size()) {
-				productList = productList.subList(0, Integer.parseInt(item));
+			if(Integer.parseInt(value) < productList.size()) {
+				productList = productList.subList(0, Integer.parseInt(value));
 			}
 		}
 		

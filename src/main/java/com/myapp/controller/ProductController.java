@@ -14,46 +14,38 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myapp.service.ProductService;
+import com.myapp.service.UserService;
 
-/**
- * 상품 관련 컨트롤러
- * @author chans
- */
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
+
+@Api(tags = {"2. Product"})
 @CrossOrigin(origins = "*", allowedHeaders = "*")//크로스 도메인 해결을 위한 어노테이션
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
+@RequestMapping("/v1")
 public class ProductController {
 	
-	@Autowired
-	private ProductService productService;
+	private final ProductService productService;
 	
-	/**
-	 * 전체상품 조회
-	 * @param 
-	 * @return resultJson
-	 */
+	@ApiOperation(value = "전체 상품 조회", notes = "전체 상품을 조회합니다")
 	@GetMapping("/products")
-	public JSONObject findAllProdect() {
+	public JSONObject findAllProdect() throws Exception {
 		
 		return productService.findAllProduct();
 	}
 	
-	/**
-	 * 조건부 상품 조회
-	 * @param condition
-	 * @return resultJson
-	 */
+	@ApiOperation(value = "조건부 상품 조회", notes = "요청받은 조건으로 상품을 조회합니다")
 	@GetMapping("/products/{condition}/{item}")
-	public JSONObject findProdects(@PathVariable String condition, @PathVariable String item) {
+	public JSONObject findProducts(@ApiParam(value = "조건명", required = true) @PathVariable String condition, 
+								   @ApiParam(value = "조건값", required = true) @PathVariable String value) {
 		
-		return productService.findProducts(condition, item);
+		return productService.findProducts(condition, value);
 	}
 	
-	/**
-	 * 상품 추가
-	 * @param body
-	 * @return resultJson
-	 */
+	@ApiOperation(value = "상품추가", notes = "상품을 추가합니다")
 	@PostMapping("/product")
 	public JSONObject addProduct() {
 		return productService.addProduct();

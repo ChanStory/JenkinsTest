@@ -17,13 +17,10 @@ import com.myapp.service.UserService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 
 
-/**
- * 유저 관련 컨트롤러
- * @author chans
- */
 @Api(tags = {"1. User"})
 @CrossOrigin(origins = "*", allowedHeaders = "*")//크로스 도메인 해결을 위한 어노테이션
 @RequiredArgsConstructor
@@ -31,13 +28,11 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/v1")
 public class UserController {
 
-	
-	private final UserService userService;
-	
+	private final UserService userService;	
 	
 	@ApiOperation(value = "ID 중복체크", notes = "가입하려는 ID의 중복을 체크한다")
 	@GetMapping("/id-duplicate/{id}")
-	public JSONObject idDuplicateCheck(@PathVariable String id) {
+	public JSONObject idDuplicateCheck(@ApiParam(value = "회원아이디", required = true) @PathVariable String id) {
 		return userService.idDuplicateCheck(id);
 	}
 	
