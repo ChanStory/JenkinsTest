@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.myapp.advice.exception.CUserNotFoundException;
+import com.myapp.advice.exception.UserNotFoundException;
 import com.myapp.dao.ProductReprository;
 import com.myapp.object.Product;
 
@@ -51,7 +51,7 @@ public class ProductService {
 	 */
 	public JSONObject findAllProduct() throws Exception {
 		if(true) {
-			throw new CUserNotFoundException("message");
+			throw new UserNotFoundException("message");
 		}
 		JSONObject jsonResult = new JSONObject();
 		
