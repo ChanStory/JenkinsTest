@@ -12,8 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j//log객체 생성 생략
 public class AroundAdvice {
 
-	@Around("execution(* com.myapp..*(..))")
-	public Object logging(ProceedingJoinPoint pjp) throws Throwable {
+	@Around("execution(* com.myapp.controller..*(..))")
+	public Object controllerLogging(ProceedingJoinPoint pjp) throws Throwable {
 		
 		String targetClassName = pjp.getTarget().getClass().getName();
 		String targetMethodName = pjp.getSignature().getName();
@@ -30,4 +30,5 @@ public class AroundAdvice {
 
 		return returnValue;
 	}
+	
 }

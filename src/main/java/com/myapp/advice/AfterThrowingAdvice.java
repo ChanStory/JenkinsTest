@@ -2,18 +2,16 @@ package com.myapp.advice;
 
 import java.io.UnsupportedEncodingException;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.myapp.advice.exception.AuthenticationEntryPointException;
 import com.myapp.advice.exception.LoginFailedException;
 import com.myapp.advice.exception.UserNotFoundException;
 import com.myapp.common.CommonResult;
@@ -63,6 +61,32 @@ public class AfterThrowingAdvice {
 	public CommonResult loginFailedException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		String code = encodingProperty("exception.loginFailed.code");
 		String msg = encodingProperty("exception.loginFailed.msg");
+		
+		if (log.isErrorEnabled()) {
+			log.error("exception code : {}, msg : {}", code, msg, e);
+		}
+		
+		return responseService.getFailResult(Integer.parseInt(code), msg);
+	}
+	
+	@ExceptionHandler(AuthenticationEntryPointException.class) 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public CommonResult authConfigException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
+		String code = encodingProperty("exception.entryPoint.code");
+		String msg = encodingProperty("exception.entryPoint.msg");
+		
+		if (log.isErrorEnabled()) {
+			log.error("exception code : {}, msg : {}", code, msg, e);
+		}
+		
+		return responseService.getFailResult(Integer.parseInt(code), msg);
+	}
+	
+	@ExceptionHandler(AccessDeniedException.class) 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public CommonResult accessDeniedException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
+		String code = encodingProperty("exception.accessDenied.code");
+		String msg = encodingProperty("exception.accessDenied.msg");
 		
 		if (log.isErrorEnabled()) {
 			log.error("exception code : {}, msg : {}", code, msg, e);

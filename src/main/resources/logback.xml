@@ -8,7 +8,9 @@
 		</encoder>
 	</appender>
 
-	<logger name="com.myapp" level="debug" />
+	<logger name="com.myapp.advice" level="debug" />
+	<logger name="com.myapp.controller" level="debug" />
+	<logger name="com.myapp.service" level="debug" />
 			
 	<!-- level : trace - debug - info - warn - error -->	
 	<root level="info">

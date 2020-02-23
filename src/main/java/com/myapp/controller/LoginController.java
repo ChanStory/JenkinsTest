@@ -35,7 +35,7 @@ public class LoginController {
     private final ResponseService responseService;
     private final PasswordEncoder passwordEncoder;
  
-    @ApiOperation(value = "로그인", notes = "이메일 회원 로그인을 한다.")
+    @ApiOperation(value = "로그인", notes = "회원 로그인을 한다")
     @GetMapping(value = "/login")
     public SingleResult<String> login(@ApiParam(value = "회원ID : 이메일", required = true) @RequestParam String id,
                                        @ApiParam(value = "비밀번호", required = true) @RequestParam String password) {
@@ -47,12 +47,12 @@ public class LoginController {
         return responseService.getSingleResult(jwtTokenProvider.createToken(user.getUsername(), user.getRoles()));
     }
  
-    @ApiOperation(value = "가입", notes = "회원가입을 한다.")
+    @ApiOperation(value = "회원가입", notes = "회원가입을 한다")
     @GetMapping(value = "/join")
-    public CommonResult join(@ApiParam(value = "회원ID : 이메일", required = true) @RequestParam String id,
-                               @ApiParam(value = "비밀번호", required = true) @RequestParam String password,
-                               @ApiParam(value = "이름", required = true) @RequestParam String name) {
- 
+    public CommonResult join(@ApiParam(value = "회원ID", required = true) @RequestParam String id,
+                             @ApiParam(value = "비밀번호", required = true) @RequestParam String password,
+                             @ApiParam(value = "이름", required = true) @RequestParam String name) {
+    	
     	userRepository.save(User.builder()
                 .uid(id)
                 .password(passwordEncoder.encode(password))

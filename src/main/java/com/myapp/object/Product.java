@@ -33,13 +33,13 @@ public class Product {
 	@Id
     @Column(name = "PRODUCT_ID")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
-	generator = "PRODUCT_SEQ_GENERATOR")
+					generator = "PRODUCT_SEQ_GENERATOR")
     private Long id;
     
-    @Column(name = "NAME", nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
     
-    @Column(name = "PRICE", nullable = false)
+    @Column(nullable = false, length = 100)
     private int price;
     
     @Lob

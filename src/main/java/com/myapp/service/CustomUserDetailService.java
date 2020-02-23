@@ -1,5 +1,5 @@
 
-package com.myapp.security;
+package com.myapp.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +18,6 @@ public class CustomUserDetailService implements UserDetailsService {
 	private final UserRepository userRepository;
 
 	public UserDetails loadUserByUsername(String userPk) {
-		return userRepository.findById(Integer.valueOf(userPk)).orElseThrow(UserNotFoundException::new);
+		return userRepository.findByUid(userPk).orElseThrow(UserNotFoundException::new);
 	}
 }
