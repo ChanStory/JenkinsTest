@@ -25,28 +25,31 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	
+	//jwt토큰 라이브러리
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	implementation 'io.springfox:springfox-swagger2:2.6.1'
+	
+	//swagger 라이브러리
+	implementation 'io.springfox:springfox-swagger2:2.6.1' 
 	implementation 'io.springfox:springfox-swagger-ui:2.6.1'
 	
-	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.2'
-	
+	//lombok 라이브러리
 	compileOnly 'org.projectlombok:lombok'
-	
-	runtimeOnly 'mysql:mysql-connector-java'
-	runtimeOnly 'com.h2database:h2:1.4.199'
-	
 	annotationProcessor 'org.projectlombok:lombok'
+	
+	//JDBC 라이브러리
+	runtimeOnly 'mysql:mysql-connector-java'
+	//runtimeOnly 'com.h2database:h2:1.4.199'
+	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 }
 
+//github push 시에 jennkins로 빌드해 aws에 자동으로 배포되기 위해 jar파일을 생성함
 bootJar {
     archiveBaseName = 'myapp'
     archiveFileName = 'myapp.jar'

@@ -12,7 +12,12 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+/**
+ * 권한 부족 예외 핸들러
+ * 
+ * @author chans
+ */
+
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override

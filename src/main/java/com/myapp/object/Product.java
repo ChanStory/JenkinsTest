@@ -56,16 +56,12 @@ public class Product {
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastModifiedDate;
-    
+        
     
     public Product() {
     	Date nowDate = new Date();
     	
     	createdDate = nowDate;
-    	lastModifiedDate = nowDate;
     }
     
 }

@@ -10,14 +10,25 @@ import com.myapp.dao.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+/**
+ * CustomUserDetailService
+ * 
+ * @author chans
+ */
 
+@RequiredArgsConstructor
 @Service
 public class CustomUserDetailService implements UserDetailsService {
 
 	private final UserRepository userRepository;
 
-	public UserDetails loadUserByUsername(String userPk) {
-		return userRepository.findByUid(userPk).orElseThrow(UserNotFoundException::new);
+	/**
+	 * 유저 ID로 유저를 검색
+	 * 
+	 * @param String uid
+	 * @return UserDetails
+	 */
+	public UserDetails loadUserByUsername(String uid) {
+		return userRepository.findByUid(uid).orElseThrow(UserNotFoundException::new);
 	}
 }

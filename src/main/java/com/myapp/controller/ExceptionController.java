@@ -9,9 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.myapp.advice.exception.AuthenticationEntryPointException;
 import com.myapp.common.CommonResult;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import springfox.documentation.annotations.ApiIgnore;
 
-@RequiredArgsConstructor
+/**
+ * 예외처리 컨트롤러
+ * 
+ * @author chans
+ */
+
+@ApiIgnore
 @RestController
 @RequestMapping(value = "/exception")
 public class ExceptionController {

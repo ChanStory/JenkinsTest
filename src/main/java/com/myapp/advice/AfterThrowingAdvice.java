@@ -20,8 +20,13 @@ import com.myapp.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 에러로깅, 예외처리 클래스
+ * 
+ * @author chans
+ */
 
-@Slf4j//log객체 생성 생략
+@Slf4j
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class AfterThrowingAdvice {
@@ -30,6 +35,14 @@ public class AfterThrowingAdvice {
 	
 	private final ResponseService responseService;
 	
+	/**
+	 * 일반적인 예외
+	 * 
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 500
+	 */
 	@ExceptionHandler(Exception.class) 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public CommonResult defaultException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException {
@@ -43,8 +56,16 @@ public class AfterThrowingAdvice {
 		return responseService.getFailResult(Integer.parseInt(code), msg);
 	}
 	
+	/**
+	 * 등록된 유저가 없을 때 발생하는 예외
+	 * 
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 401
+	 */
 	@ExceptionHandler(UserNotFoundException.class) 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public CommonResult userNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		String code = encodingProperty("exception.useNotFound.code");
 		String msg = encodingProperty("exception.useNotFound.msg");
@@ -56,8 +77,16 @@ public class AfterThrowingAdvice {
 		return responseService.getFailResult(Integer.parseInt(code), msg);
 	}
 	
+	/**
+	 * 로그인 실패 예외
+	 * 
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 401
+	 */
 	@ExceptionHandler(LoginFailedException.class) 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public CommonResult loginFailedException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		String code = encodingProperty("exception.loginFailed.code");
 		String msg = encodingProperty("exception.loginFailed.msg");
@@ -69,8 +98,16 @@ public class AfterThrowingAdvice {
 		return responseService.getFailResult(Integer.parseInt(code), msg);
 	}
 	
+	/**
+	 * 리소스 접근 권한 자체가 없을 때 발생하는 예외
+	 *  
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 401
+	 */
 	@ExceptionHandler(AuthenticationEntryPointException.class) 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public CommonResult authConfigException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		String code = encodingProperty("exception.entryPoint.code");
 		String msg = encodingProperty("exception.entryPoint.msg");
@@ -82,8 +119,16 @@ public class AfterThrowingAdvice {
 		return responseService.getFailResult(Integer.parseInt(code), msg);
 	}
 	
+	/**
+	 * 리소스 접근 권한이 부족할 때 발생하는 예외
+	 *  
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 401
+	 */
 	@ExceptionHandler(AccessDeniedException.class) 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public CommonResult accessDeniedException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		String code = encodingProperty("exception.accessDenied.code");
 		String msg = encodingProperty("exception.accessDenied.msg");
