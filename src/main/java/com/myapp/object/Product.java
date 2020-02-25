@@ -14,48 +14,59 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 상품 엔티티
+ * 
+ * @author chans
+ */
+@Builder // builder를 사용할수 있게 함
+@AllArgsConstructor // 인자를 모두 갖춘 생성자를 자동으로 생성
 @Entity
 @Getter @Setter
-@Table(name="PRODUCT", uniqueConstraints = {@UniqueConstraint(
-		name = "ID_UNIQUE",
-		columnNames = "PRODUCT_ID")}
-		)
+@Table(name="PRODUCT",
+	   uniqueConstraints = { //유니크 제약조건
+			@UniqueConstraint(name = "ID_UNIQUE", 
+							  columnNames = "PRODUCT_ID")}
+)
 @SequenceGenerator(
-		name = "PRODUCT_SEQ_GENERATOR",
-		sequenceName = "PRODUCT_SEQ",
-		initialValue = 1, allocationSize = 1
-		)
+	name = "PRODUCT_SEQ_GENERATOR",
+	sequenceName = "PRODUCT_SEQ",
+	initialValue = 1, //시퀀스 초기값
+	allocationSize = 1 //시퀀스 증가량
+)
 public class Product {
 	
 	@Id
     @Column(name = "PRODUCT_ID")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
 					generator = "PRODUCT_SEQ_GENERATOR")
-    private Long id;
+    private Long id; //id
     
     @Column(nullable = false, length = 100)
-    private String name;
+    private String name; //이름
     
     @Column(nullable = false, length = 100)
-    private int price;
+    private int price; //가격
     
     @Lob
-    private String description;
+    private String description; //상품설명
     
-    @Column(name = "imageName")
-    private String imageName;
+    private String imageName; //상품 이미지파일 이름
     
-    @Column(name = "kind")
-    private String kind;
+    private String kind; //종류
     
-    @Column(name = "brand")
-    private String brand;
+    private String brand; //브랜드
+    
+    private int stockQuantity; //재고수량
     
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdDate;
+    private Date createdDate; //등록일자
         
     
     public Product() {
