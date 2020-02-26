@@ -34,6 +34,6 @@ public class SwaggerConfiguration {
     private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder().title("토이 프로젝트 쇼핑몰 API Document")
                 .description("토이 프로젝트 쇼핑몰 API Document 입니다")
-                .license("chans © 2019").version("1").build();
+                .license("chans © 2020").version("1").build();
     }
 }

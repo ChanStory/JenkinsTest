@@ -25,8 +25,9 @@ import lombok.Setter;
  * 
  * @author chans
  */
-@Builder // builder를 사용할수 있게 함
-@AllArgsConstructor // 인자를 모두 갖춘 생성자를 자동으로 생성
+@Builder //builder를 사용할수 있게 함
+@NoArgsConstructor //인자없는 생성자를 자동으로 생성
+@AllArgsConstructor //인자를 모두 갖춘 생성자를 자동으로 생성
 @Entity
 @Getter @Setter
 @Table(name="PRODUCT",
@@ -66,13 +67,6 @@ public class Product {
     private int stockQuantity; //재고수량
     
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdDate; //등록일자
-        
-    
-    public Product() {
-    	Date nowDate = new Date();
-    	
-    	createdDate = nowDate;
-    }
+    private final Date createdDate = new Date(); //등록일자
     
 }

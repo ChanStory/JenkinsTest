@@ -15,12 +15,10 @@ import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.CascadeType;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,47 +33,37 @@ import com.myapp.object.OrderItem;
  * @author chans
  */
 
-@Builder // builder를 사용할수 있게 함
+@Builder //builder를 사용할수 있게 함
 @Entity
 @Getter @Setter
-@NoArgsConstructor // 인자없는 생성자를 자동으로 생성
-@AllArgsConstructor // 인자를 모두 갖춘 생성자를 자동으로 생성
+@NoArgsConstructor //인자없는 생성자를 자동으로 생성
+@AllArgsConstructor //인자를 모두 갖춘 생성자를 자동으로 생성
 @Table(name = "ORDERS")
 public class Order{
-	
-	public enum OrderStatus {
-		배송준비중,
-		배송중,
-		배송완료;
-    }
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ORDER_ID")
-    private Long id;
-	
-    @Column(nullable = false, unique = true, length = 30)
-    private String uid;
-    
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(nullable = false, length = 100)
-    private String password;
-    
-    @Column(nullable = false, length = 100)
-    private String name;
+    private Long id; //id
  
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID")
-    private User user;
+    private User user; //주문자
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems = new ArrayList<OrderItem>();
+    private List<OrderItem> orderItems = new ArrayList<OrderItem>(); //주문 상품
     
-    private String delivery;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "DELIVERY_ID")
+    private Delivery delivery; //배송정보
     
-    private Date orderDate;
+    private final Date orderDate = new Date(); //주문시간
     
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus status; //주문상태
     
+    public enum OrderStatus {
+		ORDER,
+		CANCEL
+    }
 }
