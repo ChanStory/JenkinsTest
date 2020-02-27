@@ -1,30 +1,22 @@
 package com.myapp.object;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import io.swagger.annotations.*;
 
 /**
  * 유저 엔티티
@@ -37,31 +29,58 @@ import lombok.NoArgsConstructor;
 @Getter @Setter
 @NoArgsConstructor //인자없는 생성자를 자동으로 생성
 @AllArgsConstructor //인자를 모두 갖춘 생성자를 자동으로 생성
+@ToString //toString 메서드를 override 해주어 객체 주소가 아니라 프로퍼티값들을 보여줌
+@ApiModel(value = "User")
 @Table(name = "USER")
 public class User implements UserDetails {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "USER_NUMBER")
+	@ApiModelProperty(hidden = true) //swagger문서에 프로퍼티값이 안보이게 함, 유저 객체를 반환해줄 때 msrl값은 같이 넘어가야하기 때문
+	@Column(name = "NUMBER")
     private long msrl; //유저 넘버
 	
-    @Column(name = "USER_ID", nullable = false, unique = true, length = 30)
+	@NotNull
+	@Pattern(regexp = "^[a-zA-Z0-9]{5,15}$") //영대.소문자, 숫자만 사용해서 5~15자리
+    @Column(name = "ID", nullable = false, unique = true, length = 15)
     private String uid; //유저 아이디
     
+	@NotNull
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //직렬화 시 해당 필드를 제외시켜 json응답에 미포함 됨
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 15)
     private String password; //비밀번호
     
-    @Column(nullable = false, length = 100)
+	@NotNull
+    @Column(nullable = false, length = 50)
     private String name; //이름
     
-    @ElementCollection(fetch = FetchType.EAGER)
+	@Past //입력받은 날짜값이 과거의 날짜인지 체크
+    @JsonFormat(pattern = "yyyyMMdd") //json으로 넘어오는 String을 yyyyMMdd 포맷으로 받기위해
+    private LocalDate birthDate; //생년월일
+    
+	@Pattern(regexp = "^01(?:0|1|[6-9])(\\d{3}|\\d{4})(\\d{4})$") //01(0,1,6,7,8,9) - 3~4자리숫자 - 4자리숫자
+    private String phoneNumber; //전화번호
+    
+	@NotNull
+    private String address; //주소
+    
+    @Email //이메일형식에 맞는지 체크
+    private String email; //이메일
+    
+    
+    @ApiModelProperty(hidden = true)
+    @ElementCollection(fetch = FetchType.EAGER) //user가 없이 user_roles 만 있는게 의미가 없기때문에 ElementCollection으로 설정
+    @CollectionTable(
+            name = "USER_ROLES",
+            joinColumns = @JoinColumn(name="USER_NUMBER")
+      )
     @Builder.Default
     private List<String> roles = new ArrayList<>(); //권한
  
     
-    //getAuthorities 메서드 재정의 호출 시 권한을 부여, 반환해줌
+    //getAuthorities 메서드 재정의 호출 시 권한리스트를 반환해줌
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }

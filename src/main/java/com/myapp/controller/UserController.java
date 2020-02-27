@@ -1,11 +1,18 @@
 package com.myapp.controller;
 
+import java.util.Collections;
+
+import javax.validation.Valid;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +24,7 @@ import com.myapp.common.SingleResult;
 import com.myapp.dao.UserRepository;
 import com.myapp.object.User;
 import com.myapp.service.ResponseService;
+import com.myapp.service.UserService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -34,14 +42,38 @@ import lombok.extern.slf4j.Slf4j;
 
 @Api(tags = {"2. User"})
 @Slf4j
+@CrossOrigin(origins = "*", allowedHeaders = "*")//크로스 도메인 해결을 위한 어노테이션
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/v1")
 public class UserController {
- 
+	
+	private final UserService userService;
     private final UserRepository userRepository;
     private final ResponseService responseService;
  
+    /**
+	 * 회원가입
+	 * 
+	 * @param id 
+	 * @param password 
+	 * @param name 
+	 * @param phoneNumber 
+	 * @param birthDate 
+	 * @param email 
+	 * @param address 
+	 * @return CommonResult
+	 */
+    @ApiOperation(value = "회원가입", notes = "회원가입을 한다")
+    @PostMapping(value = "/user")
+    public CommonResult join(@ApiParam(value = "회원가입시 필요한 데이터", 
+    								   required = true) @Valid @RequestBody User user) {
+    	
+    	userService.join(user, Collections.singletonList("ROLE_USER"));
+        
+    	return responseService.getSuccessResult();
+    }
+    
     /**
 	 * 전체 회원 조회
 	 * 
@@ -86,10 +118,12 @@ public class UserController {
     @PutMapping(value = "/user")
     public SingleResult<User> modify( @ApiParam(value = "회원번호", required = true) @RequestParam int msrl,
             						  @ApiParam(value = "회원이름", required = true) @RequestParam String name) {
-        User user = User.builder()
-                .msrl(msrl)
-                .name(name)
-                .build();
+    	User user = new User();
+    	
+//        User user = User.builder()
+//                .msrl(msrl)
+//                .name(name)
+//                .build();
         
         return responseService.getSingleResult(userRepository.save(user));
     }

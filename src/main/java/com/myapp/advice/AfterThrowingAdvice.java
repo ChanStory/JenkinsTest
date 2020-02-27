@@ -7,12 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.myapp.advice.exception.AuthenticationEntryPointException;
 import com.myapp.advice.exception.LoginFailedException;
+import com.myapp.advice.exception.PasswordNotMatchException;
 import com.myapp.advice.exception.UserNotFoundException;
 import com.myapp.common.CommonResult;
 import com.myapp.service.ResponseService;
@@ -132,6 +134,48 @@ public class AfterThrowingAdvice {
 	public CommonResult accessDeniedException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		String code = encodingProperty("exception.accessDenied.code");
 		String msg = encodingProperty("exception.accessDenied.msg");
+		
+		if (log.isErrorEnabled()) {
+			log.error("exception code : {}, msg : {}", code, msg, e);
+		}
+		
+		return responseService.getFailResult(Integer.parseInt(code), msg);
+	}
+	
+	/**
+	 * 회원가입 시 입력받은 데이터의 유효성검사가 실패하는 발생하는 예외
+	 *  
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 400
+	 */
+	@ExceptionHandler(MethodArgumentNotValidException.class)  
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+	public CommonResult methodArgumentNotValidException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
+		String code = encodingProperty("exception.methodArgumentNotValid.code");
+		String msg = encodingProperty("exception.methodArgumentNotValid.msg");
+		
+		if (log.isErrorEnabled()) {
+			log.error("exception code : {}, msg : {}", code, msg, e);
+		}
+		
+		return responseService.getFailResult(Integer.parseInt(code), msg);
+	}
+	
+	/**
+	 * 회원가입 시 입력받은 패스워드의 유효성검사가 실패하는 발생하는 예외
+	 *  
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 400
+	 */
+	@ExceptionHandler(PasswordNotMatchException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public CommonResult passwordNotMatchException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
+		String code = encodingProperty("exception.methodArgumentNotValid.code");
+		String msg = encodingProperty("exception.methodArgumentNotValid.msg");
 		
 		if (log.isErrorEnabled()) {
 			log.error("exception code : {}, msg : {}", code, msg, e);

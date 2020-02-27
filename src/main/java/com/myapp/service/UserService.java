@@ -1,83 +1,53 @@
 package com.myapp.service;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.MethodParameter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import com.myapp.advice.exception.PasswordNotMatchException;
 import com.myapp.dao.UserRepository;
 import com.myapp.object.User;
+
+import lombok.RequiredArgsConstructor;
 
 
 /**
  * 유저 관련 서비스
  * @author chans
  */
-//@Service
-//public class UserService {
-//
-//	@Autowired
-//	private UserRepository userRepository;
-//	
-//	/**
-//	 * 로그인
-//	 * @param loginMap
-//	 * @return resultJson
-//	 */
-//	public JSONObject login(Map<String, String> loginMap) {
-//		JSONObject resultJson = new JSONObject();
-//		String id = loginMap.get("loginId");
-//		String password = loginMap.get("loginPassword");
-//		
-//		//user객체를 id로 검색 없을 시 null
-//		/*
-//		 * User user = userRepository.findById(id).orElse(null);
-//		 * 
-//		 * if(user != null) { if(user.getPassword().equals(password)) {
-//		 * resultJson.put("result", "success"); }else { resultJson.put("result",
-//		 * "notMatch"); }
-//		 * 
-//		 * }else { resultJson.put("result", "doesNotExist"); }
-//		 */
-//		
-//		return resultJson;
-//	}
-//	
-//	/**
-//	 * 회원가입
-//	 * @param userMap
-//	 * @return resultJson
-//	 */
-//	public JSONObject join(Map<String, String> userMap) {
-//		User joinUser = new User();
-//		userRepository.save(joinUser);
-//		
-//		JSONObject resultJson = new JSONObject();
-//		resultJson.put("result", "success");
-//		
-//		return resultJson;
-//	}
-//	
-//	/**
-//	 * id 중복체크
-//	 * @param idString
-//	 * @return resultJson
-//	 */
-//	public JSONObject idDuplicateCheck(String idString) {
-//		JSONObject resultJson = new JSONObject();
-//		/*
-//		 * Optional<User> userOptional = userRepository.findById(idString);
-//		 * 
-//		 * if(userOptional.isPresent()) { resultJson.put("duplicateResult",
-//		 * "canNotUsed"); }else { resultJson.put("duplicateResult", "available"); }
-//		 */
-//
-//		return resultJson;
-//	}
-//
-//	public JSONObject findAllUsers() {
-//		
-//		return null;
-//	}
-//}
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+
+	private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    
+	/**
+	 * 회원가입
+	 * @param User user
+	 * @param List<String> roles
+	 * @return 
+	 */
+	public void join(User user, List<String> roles) {
+		String password = user.getPassword();
+		
+		//User 객체에서 어노테이션으로 유효성 검사를 실행하면 passwordEncoder.encode 했을시에 예외가 떨어져 따로 검사함
+		Pattern pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,15}$"); //영어 대.소문자, 숫자, 특수문자를 1개이상씩 포함시켜 8~15자리
+        Matcher matcher = pattern.matcher(password);
+		
+        if(!matcher.find()) {
+        	throw new PasswordNotMatchException();
+        }
+        
+		user.setPassword(passwordEncoder.encode(password));
+		user.setRoles(roles);
+		userRepository.save(user);
+	}
+
+}
