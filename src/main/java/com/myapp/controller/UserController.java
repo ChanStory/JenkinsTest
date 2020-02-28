@@ -1,11 +1,10 @@
 package com.myapp.controller;
 
 import java.util.Collections;
+import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.myapp.advice.exception.UserNotFoundException;
 import com.myapp.common.CommonResult;
 import com.myapp.common.ListResult;
 import com.myapp.common.SingleResult;
@@ -65,9 +63,8 @@ public class UserController {
 	 * @return CommonResult
 	 */
     @ApiOperation(value = "회원가입", notes = "회원가입을 한다")
-    @PostMapping(value = "/user")
-    public CommonResult join(@ApiParam(value = "회원가입시 필요한 데이터", 
-    								   required = true) @Valid @RequestBody User user) {
+    @PostMapping(value = "/join") //회원가입은 권한이 없는 사람도 접근이 가능해야 해서 join으로 매핑
+    public CommonResult join( @ApiParam(value = "회원가입시 필요한 데이터", required = true) @Valid @RequestBody User user) {
     	
     	userService.join(user, Collections.singletonList("ROLE_USER"));
         
@@ -83,8 +80,8 @@ public class UserController {
     @ApiOperation(value = "전체 회원 조회", notes = "모든 회원을 조회한다")
     @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
     @GetMapping(value = "/users")
-    public ListResult<User> findAllUser() {
-        return responseService.getListResult(userRepository.findAll());
+    public ListResult<User> findAllUsers() {
+        return responseService.getListResult(userService.findAllUsers());
     }
  
     /**
@@ -93,16 +90,11 @@ public class UserController {
 	 * @param X-AUTH-TOKEN
 	 * @return SingleResult
 	 */
-    @ApiOperation(value = "회원 단건 조회", notes = "회원을 조회한다")
+    @ApiOperation(value = "회원 단건 조회", notes = "토큰으로 인증된 회원을 조회한다")
     @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = false, dataType = "String", paramType = "header") })
     @GetMapping(value = "/user")
     public SingleResult<User> findUserById() {
-    	
-        // SecurityContext에서 인증받은 회원의 정보를 얻어온다
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String id = authentication.getName();
-        
-        return responseService.getSingleResult(userRepository.findByUid(id).orElseThrow(UserNotFoundException::new));
+        return responseService.getSingleResult(userService.findUser());
     }
  
     /**
@@ -111,21 +103,26 @@ public class UserController {
 	 * @param X-AUTH-TOKEN
 	 * @param int msrl
 	 * @param String name
+	 * @param String password
+	 * @param String phoneNumber
+	 * @param String address
+	 * @param String email
+	 * @param String role
 	 * @return SingleResult
 	 */
     @ApiOperation(value = "회원 수정", notes = "회원정보를 수정한다")
     @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
-    @PutMapping(value = "/user")
-    public SingleResult<User> modify( @ApiParam(value = "회원번호", required = true) @RequestParam int msrl,
-            						  @ApiParam(value = "회원이름", required = true) @RequestParam String name) {
-    	User user = new User();
+    @PutMapping(value = "/user/{msrl}")
+	public CommonResult modify( @ApiParam(value = "회원번호", required = true) @PathVariable int msrl,
+								@ApiParam(value = "수정할 데이터 key : value", required = true) @RequestParam Map<String, String> updateMap) {
     	
+    	userService.userUpdate(msrl, updateMap);
 //        User user = User.builder()
 //                .msrl(msrl)
 //                .name(name)
-//                .build();
+//                .build(); userRepository.save(user)
         
-        return responseService.getSingleResult(userRepository.save(user));
+        return responseService.getSuccessResult();
     }
 
     /**

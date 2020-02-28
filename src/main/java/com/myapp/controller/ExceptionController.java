@@ -24,11 +24,23 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping(value = "/exception")
 public class ExceptionController {
  
+	/**
+	 * AuthenticationEntryPointException 예외 발생
+	 * 
+	 * @param 
+	 * @return 
+	 */
     @GetMapping(value = "/entrypoint")
     public CommonResult entrypointException() {
         throw new AuthenticationEntryPointException();
     }
     
+    /**
+	 * AccessDeniedException 예외 발생
+	 * 
+	 * @param 
+	 * @return 
+	 */
     @GetMapping(value = "/accessdenied")
     public CommonResult accessdeniedException() throws AccessDeniedException {
         throw new AccessDeniedException("");

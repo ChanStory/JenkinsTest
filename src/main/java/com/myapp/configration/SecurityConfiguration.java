@@ -45,7 +45,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //jwt token으로 인증하므로 세션은 생성안함
             .and()
                 .authorizeRequests() //다음 리퀘스트에 대한 사용권한 체크
-                    .antMatchers("/*/login", "/*/user", "/exception/**").permitAll() //가입, 인증, exception 주소는 누구나 접근가능
+                    .antMatchers("/*/login", "/*/join", "/exception/**").permitAll() //가입, 인증, exception 주소는 누구나 접근가능
+                    .antMatchers("/*/users").hasRole("ADMIN") //ADMIN 권한만 접근가능
                     .anyRequest().authenticated() //그외 나머지 요청은 모두 인증된 회원만 접근 가능
             .and()
             	.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint()) //리소스에 접근하기 위한 권한이 없을 시 처리하는 핸들러

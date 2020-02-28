@@ -143,7 +143,7 @@ public class AfterThrowingAdvice {
 	}
 	
 	/**
-	 * 회원가입 시 입력받은 데이터의 유효성검사가 실패하는 발생하는 예외
+	 * 회원가입 시 입력받은 데이터의 유효성검사가 실패하면 발생하는 예외
 	 *  
 	 * @param HttpServletRequest request
 	 * @param Exception e
@@ -164,7 +164,7 @@ public class AfterThrowingAdvice {
 	}
 	
 	/**
-	 * 회원가입 시 입력받은 패스워드의 유효성검사가 실패하는 발생하는 예외
+	 * 회원가입 시 입력받은 패스워드의 유효성검사가 실패하면 발생하는 예외
 	 *  
 	 * @param HttpServletRequest request
 	 * @param Exception e
