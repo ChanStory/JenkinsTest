@@ -11,8 +11,8 @@ import com.myapp.common.CommonResult;
 import com.myapp.common.ListResult;
 import com.myapp.common.SingleResult;
 import com.myapp.dao.ProductReprository;
-import com.myapp.object.Product;
-import com.myapp.object.User;
+import com.myapp.entity.Product;
+import com.myapp.entity.User;
 import com.myapp.service.ProductService;
 import com.myapp.service.ResponseService;
 

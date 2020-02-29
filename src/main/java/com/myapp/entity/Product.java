@@ -1,4 +1,4 @@
-package com.myapp.object;
+package com.myapp.entity;
 
 import java.util.Date;
 

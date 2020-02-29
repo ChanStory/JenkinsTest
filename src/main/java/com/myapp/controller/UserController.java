@@ -20,7 +20,7 @@ import com.myapp.common.CommonResult;
 import com.myapp.common.ListResult;
 import com.myapp.common.SingleResult;
 import com.myapp.dao.UserRepository;
-import com.myapp.object.User;
+import com.myapp.entity.User;
 import com.myapp.service.ResponseService;
 import com.myapp.service.UserService;
 
@@ -110,17 +110,20 @@ public class UserController {
 	 * @param String role
 	 * @return SingleResult
 	 */
+    //swagger에서 파라미터를 map 객체로 받는것을 지원하지 않아 여기 선언 후 updateMap으로 받음
+    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header"),
+    					 @ApiImplicitParam(name = "name", value = "회원이름", required = false, dataType = "String", paramType = "query"),
+    					 @ApiImplicitParam(name = "password", value = "비밀번호", required = false, dataType = "String", paramType = "query"),
+    					 @ApiImplicitParam(name = "phoneNumber", value = "휴대폰번호", required = false, dataType = "String", paramType = "query"),
+    					 @ApiImplicitParam(name = "address", value = "주소", required = false, dataType = "String", paramType = "query"),
+    					 @ApiImplicitParam(name = "email", value = "이메일", required = false, dataType = "String", paramType = "query"),
+    					 @ApiImplicitParam(name = "role", value = "권한", required = false, dataType = "String", paramType = "query")})
     @ApiOperation(value = "회원 수정", notes = "회원정보를 수정한다")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
     @PutMapping(value = "/user/{msrl}")
 	public CommonResult modify( @ApiParam(value = "회원번호", required = true) @PathVariable int msrl,
-								@ApiParam(value = "수정할 데이터 key : value", required = true) @RequestParam Map<String, String> updateMap) {
-    	
+								@ApiParam(hidden = true) @RequestParam Map<String, String> updateMap) {
+
     	userService.userUpdate(msrl, updateMap);
-//        User user = User.builder()
-//                .msrl(msrl)
-//                .name(name)
-//                .build(); userRepository.save(user)
         
         return responseService.getSuccessResult();
     }

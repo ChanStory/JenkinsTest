@@ -1,7 +1,7 @@
 package com.myapp.dao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.myapp.object.Delivery;
+import com.myapp.entity.Delivery;
 
 /**
  * 배송정보 Reprository

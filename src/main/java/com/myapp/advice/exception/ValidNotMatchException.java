@@ -5,16 +5,16 @@ package com.myapp.advice.exception;
  * 
  * @author chans
  */
-public class PasswordNotMatchException extends RuntimeException{
-	public PasswordNotMatchException(String msg, Throwable t) {
+public class ValidNotMatchException extends RuntimeException{
+	public ValidNotMatchException(String msg, Throwable t) {
         super(msg, t);
     }
  
-    public PasswordNotMatchException(String msg) {
+    public ValidNotMatchException(String msg) {
         super(msg);
     }
  
-    public PasswordNotMatchException() {
+    public ValidNotMatchException() {
         super();
     }
 }

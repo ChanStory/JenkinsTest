@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.myapp.advice.exception.LoginFailedException;
 import com.myapp.advice.exception.UserNotFoundException;
 import com.myapp.dao.UserRepository;
-import com.myapp.object.User;
+import com.myapp.entity.User;
 import com.myapp.security.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;

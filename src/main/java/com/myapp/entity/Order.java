@@ -1,4 +1,4 @@
-package com.myapp.object;
+package com.myapp.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.myapp.entity.OrderItem;
+
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -25,8 +28,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
-
-import com.myapp.object.OrderItem;
 /**
  * 주문 엔티티
  * 

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.myapp.advice.exception.AuthenticationEntryPointException;
 import com.myapp.advice.exception.LoginFailedException;
-import com.myapp.advice.exception.PasswordNotMatchException;
 import com.myapp.advice.exception.UserNotFoundException;
+import com.myapp.advice.exception.ValidNotMatchException;
 import com.myapp.common.CommonResult;
 import com.myapp.service.ResponseService;
 
@@ -164,14 +164,14 @@ public class AfterThrowingAdvice {
 	}
 	
 	/**
-	 * 회원가입 시 입력받은 패스워드의 유효성검사가 실패하면 발생하는 예외
+	 * 입력받은 값의 유효성검사가 실패하면 발생하는 예외
 	 *  
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
 	 * @responseStatus 400
 	 */
-	@ExceptionHandler(PasswordNotMatchException.class)
+	@ExceptionHandler(ValidNotMatchException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult passwordNotMatchException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		String code = encodingProperty("exception.methodArgumentNotValid.code");

@@ -3,7 +3,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.myapp.object.Product;
+import com.myapp.entity.Product;
 
 /**
  * 상품 관련 Reprository

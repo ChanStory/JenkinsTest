@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myapp.dao.ProductReprository;
-import com.myapp.object.Product;
+import com.myapp.entity.Product;
 
 
 

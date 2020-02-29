@@ -1,4 +1,4 @@
-package com.myapp.object;
+package com.myapp.entity;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -118,5 +118,11 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+    
+    //권한 종류
+    public enum Roles {
+		ROLE_ADMIN,
+		ROLE_USER
     }
 }

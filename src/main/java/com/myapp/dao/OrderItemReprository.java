@@ -1,7 +1,7 @@
 package com.myapp.dao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.myapp.object.OrderItem;
+import com.myapp.entity.OrderItem;
 
 /**
  * 주문 상품 Reprository
