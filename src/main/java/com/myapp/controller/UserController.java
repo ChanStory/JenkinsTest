@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.myapp.advice.exception.UserNotFoundException;
 import com.myapp.common.CommonResult;
 import com.myapp.common.ListResult;
 import com.myapp.common.SingleResult;
@@ -120,10 +123,14 @@ public class UserController {
     					 @ApiImplicitParam(name = "role", value = "권한", required = false, dataType = "String", paramType = "query")})
     @ApiOperation(value = "회원 수정", notes = "회원정보를 수정한다")
     @PutMapping(value = "/user/{msrl}")
-	public CommonResult modify( @ApiParam(value = "회원번호", required = true) @PathVariable int msrl,
+	public CommonResult modify( @ApiParam(value = "회원번호", required = true) @PathVariable long msrl,
 								@ApiParam(hidden = true) @RequestParam Map<String, String> updateMap) {
-System.out.println(updateMap);
-    	userService.userUpdate(msrl, updateMap);
+    	
+    	if(log.isDebugEnabled()) {
+    		log.debug("user update parameter : {}", updateMap);
+    	}
+    	
+    	userService.modifyUser(msrl, updateMap);
         
         return responseService.getSuccessResult();
     }
@@ -138,8 +145,21 @@ System.out.println(updateMap);
     @ApiOperation(value = "회원 삭제", notes = "회원정보를 삭제한다")
     @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
     @DeleteMapping(value = "/user/{msrl}")
-    public CommonResult delete( @ApiParam(value = "회원번호", required = true) @PathVariable int msrl) {
-    	userRepository.deleteById(msrl);
+    public CommonResult delete( @ApiParam(value = "회원번호", required = true) @PathVariable long msrl) {
+    	
+    	//관리자의 요청이 아니라면 AccessDeniedException 발생
+    	if(!userService.checkAuthAdmin(userService.findUser())) {
+    		throw new AccessDeniedException("");
+    	}
+    	
+    	
+    	//삭제 시 회원번호에 맞는 회원이 없으면 UserNotFoundException 발생
+    	try {
+    		userRepository.deleteById(msrl);
+		} catch (EmptyResultDataAccessException ex) {
+			throw new UserNotFoundException();
+		}
+    	
     	
         return responseService.getSuccessResult();
     }

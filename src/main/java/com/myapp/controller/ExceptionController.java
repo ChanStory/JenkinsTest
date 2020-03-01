@@ -30,7 +30,7 @@ public class ExceptionController {
 	 * @param 
 	 * @return 
 	 */
-    @GetMapping(value = "/entrypoint")
+	@RequestMapping(value = "/entrypoint") //어떤 http메소드 요청에서 예외가 일어날지 모르니 모든 메소드를 다 받아줌
     public CommonResult entrypointException() {
         throw new AuthenticationEntryPointException();
     }
@@ -41,7 +41,7 @@ public class ExceptionController {
 	 * @param 
 	 * @return 
 	 */
-    @GetMapping(value = "/accessdenied")
+	@RequestMapping(value = "/accessdenied")
     public CommonResult accessdeniedException() throws AccessDeniedException {
         throw new AccessDeniedException("");
     }

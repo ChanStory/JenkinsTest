@@ -71,9 +71,9 @@ public class User implements UserDetails {
     @ApiModelProperty(hidden = true)
     @ElementCollection(fetch = FetchType.EAGER) //user가 없이 user_roles 만 있는게 의미가 없기때문에 ElementCollection으로 설정
     @CollectionTable(
-            name = "USER_ROLES",
-            joinColumns = @JoinColumn(name="USER_NUMBER")
-      )
+    	name = "USER_ROLES",
+        joinColumns = @JoinColumn(name="USER_NUMBER")
+     )
     private List<String> roles; //권한
  
     
