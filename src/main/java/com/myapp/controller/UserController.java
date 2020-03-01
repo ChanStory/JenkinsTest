@@ -122,7 +122,7 @@ public class UserController {
     @PutMapping(value = "/user/{msrl}")
 	public CommonResult modify( @ApiParam(value = "회원번호", required = true) @PathVariable int msrl,
 								@ApiParam(hidden = true) @RequestParam Map<String, String> updateMap) {
-
+System.out.println(updateMap);
     	userService.userUpdate(msrl, updateMap);
         
         return responseService.getSuccessResult();

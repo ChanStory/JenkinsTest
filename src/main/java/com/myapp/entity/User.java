@@ -74,8 +74,7 @@ public class User implements UserDetails {
             name = "USER_ROLES",
             joinColumns = @JoinColumn(name="USER_NUMBER")
       )
-    @Builder.Default
-    private List<String> roles = new ArrayList<>(); //권한
+    private List<String> roles; //권한
  
     
     //getAuthorities 메서드 재정의 호출 시 권한리스트를 반환해줌
