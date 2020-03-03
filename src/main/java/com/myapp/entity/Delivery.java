@@ -33,7 +33,7 @@ public class Delivery {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DELIVERY_ID")
-    private Long id; //id
+    private long id; //id
 
     @OneToOne(mappedBy = "delivery")
     private Order order; //주문

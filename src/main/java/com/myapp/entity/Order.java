@@ -1,33 +1,29 @@
 package com.myapp.entity;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-
-import com.myapp.entity.OrderItem;
-
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.CascadeType;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 /**
  * 주문 엔티티
  * 
@@ -39,19 +35,20 @@ import lombok.NoArgsConstructor;
 @Getter @Setter
 @NoArgsConstructor //인자없는 생성자를 자동으로 생성
 @AllArgsConstructor //인자를 모두 갖춘 생성자를 자동으로 생성
-@Table(name = "ORDERS")
+@Table(name = "ORDER")
 public class Order{
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ORDER_ID")
-    private Long id; //id
+    private long id; //id
  
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID")
     private User user; //주문자
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<OrderItem> orderItems = new ArrayList<OrderItem>(); //주문 상품
     
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

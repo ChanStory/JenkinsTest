@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.myapp.advice.exception.AuthenticationEntryPointException;
 import com.myapp.advice.exception.LoginFailedException;
 import com.myapp.advice.exception.ParamNameNotFoundException;
+import com.myapp.advice.exception.ProductNotFoundException;
 import com.myapp.advice.exception.UserNotFoundException;
 import com.myapp.advice.exception.ValidNotMatchException;
 import com.myapp.common.CommonResult;
@@ -70,8 +71,8 @@ public class AfterThrowingAdvice {
 	@ExceptionHandler(UserNotFoundException.class) 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public CommonResult userNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
-		String code = encodingProperty("exception.useNotFound.code");
-		String msg = encodingProperty("exception.useNotFound.msg");
+		String code = encodingProperty("exception.userNotFound.code");
+		String msg = encodingProperty("exception.userNotFound.msg");
 		
 		if (log.isErrorEnabled()) {
 			log.error("exception code : {}, msg : {}", code, msg, e);
@@ -128,10 +129,10 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 401
+	 * @responseStatus 403
 	 */
 	@ExceptionHandler(AccessDeniedException.class) 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
 	public CommonResult accessDeniedException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		String code = encodingProperty("exception.accessDenied.code");
 		String msg = encodingProperty("exception.accessDenied.msg");
@@ -198,6 +199,27 @@ public class AfterThrowingAdvice {
 	public CommonResult paramNameNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		String code = encodingProperty("exception.paramNameNotFound.code");
 		String msg = encodingProperty("exception.paramNameNotFound.msg");
+		
+		if (log.isErrorEnabled()) {
+			log.error("exception code : {}, msg : {}", code, msg, e);
+		}
+		
+		return responseService.getFailResult(Integer.parseInt(code), msg);
+	}
+	
+	/**
+	 * 조회한 상품이 존재하지 않을 때 발생하는 예외
+	 *  
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 400
+	 */
+	@ExceptionHandler(ProductNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public CommonResult productNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
+		String code = encodingProperty("exception.productNotFound.code");
+		String msg = encodingProperty("exception.productNotFound.msg");
 		
 		if (log.isErrorEnabled()) {
 			log.error("exception code : {}, msg : {}", code, msg, e);

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,11 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.myapp.advice.exception.UserNotFoundException;
 import com.myapp.common.CommonResult;
 import com.myapp.common.ListResult;
 import com.myapp.common.SingleResult;
-import com.myapp.dao.UserRepository;
 import com.myapp.entity.User;
 import com.myapp.service.ResponseService;
 import com.myapp.service.UserService;
@@ -50,7 +47,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	
 	private final UserService userService;
-    private final UserRepository userRepository;
     private final ResponseService responseService;
  
     /**
@@ -104,7 +100,7 @@ public class UserController {
 	 * 회원 수정
 	 * 
 	 * @param X-AUTH-TOKEN
-	 * @param int msrl
+	 * @param long msrl
 	 * @param String name
 	 * @param String password
 	 * @param String phoneNumber
@@ -152,14 +148,7 @@ public class UserController {
     		throw new AccessDeniedException("");
     	}
     	
-    	
-    	//삭제 시 회원번호에 맞는 회원이 없으면 UserNotFoundException 발생
-    	try {
-    		userRepository.deleteById(msrl);
-		} catch (EmptyResultDataAccessException ex) {
-			throw new UserNotFoundException();
-		}
-    	
+    	userService.deleteUser(msrl);
     	
         return responseService.getSuccessResult();
     }

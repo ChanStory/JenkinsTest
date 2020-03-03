@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -74,14 +75,14 @@ public class UserService {
 
 	/**
 	 * 회원 수정
-	 * @param int msrl
+	 * @param long msrl
 	 * @param Map<String, String> updateMap
 	 * @return 
 	 * @exception ValidNotMatchException
 	 */
 	public void modifyUser(long msrl, Map<String, String> updateMap) {
 		User requestUser = findUser();
-		User modifyUser= userRepository.findById(msrl).orElseThrow(UserNotFoundException::new);
+		User modifyUser = userRepository.findById(msrl).orElseThrow(UserNotFoundException::new);
 		
 		//관리자 권한인지 체크함
 		boolean isAdmin = checkAuthAdmin(requestUser);
@@ -112,6 +113,23 @@ public class UserService {
 		
 		//저장할 때 user에서 어노테이션으로 설정해준 유효성 검사 실행
 		userRepository.save(modifyUser);
+	}
+	
+
+	/**
+	 * 회원 삭제
+	 * @param long msrl
+	 * @return 
+	 * @exception UserNotFoundException
+	 */
+	public void deleteUser(long msrl) {
+		
+		//삭제 시 회원번호에 맞는 회원이 없으면 UserNotFoundException 발생
+    	try {
+    		userRepository.deleteById(msrl);
+		} catch (EmptyResultDataAccessException ex) {
+			throw new UserNotFoundException();
+		}
 	}
 	
 	/**
