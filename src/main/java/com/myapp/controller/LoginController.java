@@ -43,7 +43,7 @@ public class LoginController {
     @ApiOperation(value = "로그인", notes = "회원 로그인을 한다")
     @GetMapping(value = "/login")
     public SingleResult<String> login(@ApiParam(value = "id", required = true) @RequestParam String id,
-                                       @ApiParam(value = "password", required = true) @RequestParam String password) {
+                                      @ApiParam(value = "password", required = true) @RequestParam String password) {
  
     	String jwtToken = loginService.login(id, password);
  

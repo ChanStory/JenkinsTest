@@ -1,5 +1,7 @@
 package com.myapp.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -14,6 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,8 +46,10 @@ import lombok.Setter;
 )
 public class Product {
 	
+	
 	@Id
     @Column(name = "PRODUCT_ID")
+	@ApiModelProperty(hidden = true)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
 					generator = "PRODUCT_SEQ_GENERATOR")
     private Long id; //id
@@ -66,7 +71,9 @@ public class Product {
     
     private int stockQuantity; //재고수량
     
+    
+    @ApiModelProperty(hidden = true)
     @Temporal(TemporalType.TIMESTAMP)
-    private final Date createdDate = new Date(); //등록일자
+    private final LocalDateTime createdDate = LocalDateTime.now(); //등록일자
     
 }

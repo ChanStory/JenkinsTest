@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.myapp.advice.exception.ParamNameNotFoundException;
 import com.myapp.dao.ProductReprository;
 import com.myapp.entity.Product;
 
@@ -24,23 +25,24 @@ public class ProductService {
 	
 	/**
 	 * 상품추가
-	 * @param 
+	 * @param Product product
 	 * @return 
 	 */
-	public void addProduct() {
-		
-		Product product = new Product();
-		product.setName("AMD 라이젠 5 2600 (피나클 릿지)");
-		product.setPrice(133390);
-		product.setImageName("imageTest2.jpg");
-		product.setKind("cpu");
-		product.setDescription("AMD 라이젠 5 2600 (피나클 릿지) 입니다.");
-		product.setBrand("AMD");
+	public void addProduct(Product product) {
 		
 		productRepository.save(product);
 		
 	}
 
+	/**
+	 * 상품 전체 조회
+	 * @param 
+	 * @return List<Product>
+	 */
+	public List<Product> findAllProdects() {
+		return productRepository.findAll();
+	}
+	
 	/**
 	 * 조건부 상품 조회
 	 * @param String condition
@@ -50,9 +52,12 @@ public class ProductService {
 	public List<Product> findProducts(String condition, String value) {
 		List<Product> productList = null;
 		
+		//상품 종류로 구분해 조회
 		if(condition.equals("kind")) {
+			
 			return productRepository.findByKind(value);
 			
+		//상품을 최신순으로 요청한 갯수만큼 조회
 		}else if(condition.equals("count")) {
 			productList = productRepository.findAllByOrderByCreatedDateDesc();
 			
@@ -60,9 +65,15 @@ public class ProductService {
 			if(Integer.parseInt(value) < productList.size()) {
 				return productList.subList(0, Integer.parseInt(value));
 			}
+			
+		//요청한 조건이 맞지 않을때
+		}else {
+			throw new ParamNameNotFoundException();
 		}
 		
 		return productList;
 	}
+	
+	
 	
 }

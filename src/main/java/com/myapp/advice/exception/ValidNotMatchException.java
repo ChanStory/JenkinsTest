@@ -1,7 +1,7 @@
 package com.myapp.advice.exception;
 
 /**
- * 패스워드가 형식에 안맞을 때 발생하는 예외
+ * 파라미터가 유효성검사에 실패할 때 발생하는 예외
  * 
  * @author chans
  */

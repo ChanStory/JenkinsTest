@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.myapp.advice.exception.AuthenticationEntryPointException;
 import com.myapp.advice.exception.LoginFailedException;
+import com.myapp.advice.exception.ParamNameNotFoundException;
 import com.myapp.advice.exception.UserNotFoundException;
 import com.myapp.advice.exception.ValidNotMatchException;
 import com.myapp.common.CommonResult;
@@ -176,6 +177,27 @@ public class AfterThrowingAdvice {
 	public CommonResult passwordNotMatchException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		String code = encodingProperty("exception.methodArgumentNotValid.code");
 		String msg = encodingProperty("exception.methodArgumentNotValid.msg");
+		
+		if (log.isErrorEnabled()) {
+			log.error("exception code : {}, msg : {}", code, msg, e);
+		}
+		
+		return responseService.getFailResult(Integer.parseInt(code), msg);
+	}
+	
+	/**
+	 * 입력받은 요청 변수의 이름이 잘못된 경우 발생하는 예외
+	 *  
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 400
+	 */
+	@ExceptionHandler(ParamNameNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public CommonResult paramNameNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
+		String code = encodingProperty("exception.paramNameNotFound.code");
+		String msg = encodingProperty("exception.paramNameNotFound.msg");
 		
 		if (log.isErrorEnabled()) {
 			log.error("exception code : {}, msg : {}", code, msg, e);
