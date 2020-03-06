@@ -1,9 +1,6 @@
 package com.myapp.configration;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -22,33 +19,23 @@ import org.springframework.transaction.PlatformTransactionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * mysql 설정 클래스
- * 
- * @author chans
- */
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
-@PropertySource({ "application.properties" })
+@PropertySource({ "classpath:application.properties" })
 @EnableJpaRepositories( 
-	basePackages = "com.myapp.dao", //Repository가 있는 패키지
-	entityManagerFactoryRef = "mysqlEntityManager", //밑에서 생성할 EntityManagerFactory
-	transactionManagerRef = "mysqlTransactionManager" //밑에서 생성할 트랜잭션 매니저
+	basePackages = "com.myapp.dao",
+	entityManagerFactoryRef = "mysqlEntityManager", 
+	transactionManagerRef = "mysqlTransactionManager"
 )
 public class MysqlConfigration {
-	
-	private final Environment env; //내부 properties 파일
 
-	/**
-	 * mysqlEntityManager생성
-	 * 
-	 * @param
-	 * @return LocalContainerEntityManagerFactoryBean
-	 */
+	
+	private final Environment env;
+
 	@Bean
 	@Primary
-	public LocalContainerEntityManagerFactoryBean mysqlEntityManager() throws IOException {
+	public LocalContainerEntityManagerFactoryBean mysqlEntityManager() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(mysqlDataSource());
 		em.setPackagesToScan(new String[] { "com.myapp.entity" });
@@ -64,44 +51,26 @@ public class MysqlConfigration {
 
 	}
 	
-	/**
-	 * mysqlDataSource생성
-	 * 
-	 * @param
-	 * @return DataSource
-	 */
 	@Bean
 	@Primary
-	public DataSource mysqlDataSource() throws IOException {
+	public DataSource mysqlDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		
-		//DB커넥션에 관한 정보는 외부 properties파일에서 가져옴
-		FileReader resources = new FileReader("DB_JWT_Info.properties");
-		Properties properties = new Properties();
-		
-		properties.load(resources);
-		
-		dataSource.setUrl(properties.getProperty("datasource.mysql.url"));
-		dataSource.setUsername(properties.getProperty("datasource.mysql.username"));
-		dataSource.setPassword(properties.getProperty("datasource.mysql.password"));
-		dataSource.setDriverClassName(properties.getProperty("datasource.mysql.driverClassName"));
+		dataSource.setDriverClassName(env.getProperty("datasource.mysql.driverClassName"));
+		dataSource.setUrl(env.getProperty("datasource.mysql.url"));
+		dataSource.setUsername(env.getProperty("datasource.mysql.username"));
+		dataSource.setPassword(env.getProperty("datasource.mysql.password"));
 		
 		if(log.isInfoEnabled()) {
 			log.info("mysql data Source url : " + dataSource.getUrl() + ", userName : " + dataSource.getUsername() + ", password : " + dataSource.getPassword());
 		}
 			
+		
 		return dataSource;
 	}
-	
-	/**
-	 * mysqlTransactionManager생성
-	 * 
-	 * @param
-	 * @return PlatformTransactionManager
-	 */
+
 	@Bean
 	@Primary
-	public PlatformTransactionManager mysqlTransactionManager() throws IOException {
+	public PlatformTransactionManager mysqlTransactionManager() {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		transactionManager.setEntityManagerFactory(mysqlEntityManager().getObject());
 		
