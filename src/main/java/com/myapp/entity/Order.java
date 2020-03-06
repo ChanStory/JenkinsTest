@@ -1,12 +1,13 @@
 package com.myapp.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -19,6 +20,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,7 +41,8 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor //인자없는 생성자를 자동으로 생성
 @AllArgsConstructor //인자를 모두 갖춘 생성자를 자동으로 생성
-@Table(name = "ORDER")
+@EntityListeners(AuditingEntityListener.class) // JpaAuditing을 사용할수 있게 해줌
+@Table(name = "ORDERS")
 public class Order{
 	
 	@Id
@@ -55,7 +62,13 @@ public class Order{
     @JoinColumn(name = "DELIVERY_ID")
     private Delivery delivery; //배송정보
     
-    private final Date orderDate = new Date(); //주문시간
+    @CreatedDate
+    @ApiModelProperty(hidden = true)
+    private LocalDateTime createdDate; //등록일자
+    
+    @LastModifiedDate
+    @ApiModelProperty(hidden = true)
+    private LocalDateTime lastModifiedDate; //마지막 수정일자
     
     @Enumerated(EnumType.STRING)
     private OrderStatus status; //주문상태

@@ -47,7 +47,7 @@ public class User implements UserDetails {
     
 	@NotNull
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //직렬화 시 해당 필드를 제외시켜 json응답에 미포함 됨
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false)
     private String password; //비밀번호
     
 	@NotNull
