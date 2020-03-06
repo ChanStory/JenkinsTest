@@ -36,3 +36,4 @@ out/
 .settings
 /.classpath
 /.project
+/DB_JWT_Info.properties
