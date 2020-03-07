@@ -12,6 +12,8 @@ import com.myapp.advice.exception.ProductNotFoundException;
 import com.myapp.dao.ProductReprository;
 import com.myapp.entity.Product;
 
+import lombok.RequiredArgsConstructor;
+
 
 
 /**
@@ -20,11 +22,10 @@ import com.myapp.entity.Product;
  * @author chans
  */
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
-	@Autowired
-	private ProductReprository productRepository;
-	
+	private final ProductReprository productRepository;
 	
 	/**
 	 * 상품추가
@@ -78,13 +79,13 @@ public class ProductService {
 	}
 
 	/**
-	 * 회원 수정
-	 * @param long msrl
+	 * 상품 수정
+	 * @param long id
 	 * @param Map<String, String> updateMap
 	 * @return 
 	 */
-	public void modifyProduct(long msrl, Map<String, String> updateMap) {
-		Product product = productRepository.findById(msrl).orElseThrow(ProductNotFoundException::new);
+	public void modifyProduct(long id, Map<String, String> updateMap) {
+		Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
 		
 		//변경을 요청한 값만 변경 해줌
 		if(updateMap.get("name") != null) 		   	product.setName(updateMap.get("name"));
@@ -100,13 +101,13 @@ public class ProductService {
 
 	/**
 	 * 상품 삭제
-	 * @param long msrl
+	 * @param long id
 	 * @return 
 	 */
-	public void deleteProduct(long msrl) {
+	public void deleteProduct(long id) {
 		//삭제 시 상품번호에 맞는 상품이 없으면 ProductNotFoundException 발생
     	try {
-    		productRepository.deleteById(msrl);
+    		productRepository.deleteById(id);
 		} catch (EmptyResultDataAccessException ex) {
 			throw new ProductNotFoundException();
 		}

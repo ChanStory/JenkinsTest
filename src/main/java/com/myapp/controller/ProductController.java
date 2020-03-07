@@ -51,7 +51,7 @@ public class ProductController {
 	@ApiOperation(value = "전체 상품 조회", notes = "전체 상품을 조회함")
 	@ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
 	@GetMapping("/products")
-	public ListResult<Product> findAllProdects() throws Exception {
+	public ListResult<Product> findAllProdects() {
 		return responseService.getListResult(productService.findAllProdects());
 	}
 	
@@ -128,14 +128,14 @@ public class ProductController {
 	 * 상품 삭제
 	 * 
 	 * @param X-AUTH-TOKEN
-	 * @param int msrl
+	 * @param int id
 	 * @return SingleResult
 	 */
     @ApiOperation(value = "상품 삭제", notes = "상품을 삭제한다")
     @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
-    @DeleteMapping(value = "/product/{msrl}")
-    public CommonResult delete( @ApiParam(value = "상품번호", required = true) @PathVariable long msrl) {
-    	productService.deleteProduct(msrl);
+    @DeleteMapping(value = "/product/{id}")
+    public CommonResult delete( @ApiParam(value = "상품번호", required = true) @PathVariable long id) {
+    	productService.deleteProduct(id);
     	
         return responseService.getSuccessResult();
     }
