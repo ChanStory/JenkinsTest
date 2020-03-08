@@ -45,7 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests() //다음 리퀘스트에 대한 사용권한 체크
                     .antMatchers("/*/login", "/*/join", "/exception/**").permitAll() //가입, 인증, exception 주소는 누구나 접근가능
-                    .antMatchers("/*/users", "/*/product").hasRole("ADMIN") //유저 전체조회, 상품추가, 수정은 ADMIN 권한만 접근가능
+                    .antMatchers("/*/users", "/*/product", "/*/order/delevery/").hasRole("ADMIN") //유저 전체조회, 상품추가, 수정, 배송상태변경은 ADMIN 권한만 접근가능
                     .anyRequest().hasAnyRole("USER", "ADMIN") //그외 나머지 요청은 모두 인증된 회원만 접근 가능
             .and()
             	.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint()) //리소스에 접근하기 위한 권한이 없을 시 처리하는 핸들러

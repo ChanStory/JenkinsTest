@@ -3,7 +3,6 @@ package com.myapp.service;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +37,15 @@ public class ProductService {
 		
 	}
 
+	/**
+	 * 상품 조회
+	 * @param long productId
+	 * @return Product
+	 */
+	public Product findProduct(long productId) {
+		return productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+	}
+	
 	/**
 	 * 상품 전체 조회
 	 * @param 

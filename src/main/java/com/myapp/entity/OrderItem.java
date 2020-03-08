@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.myapp.advice.exception.NegativeStockQuantityException;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,4 +48,15 @@ public class OrderItem {
 	private int orderPrice; //가격
 	
 	private int count; //갯수
+	
+	//product를 set 하면서 상품갯수를 차감함
+	public void setProduct(Product product) {
+		this.product = product;
+		
+		if(product.getStockQuantity() - count < 0) {
+			throw new NegativeStockQuantityException();
+		}
+		
+		product.setStockQuantity(product.getStockQuantity() - count);
+	}
 }

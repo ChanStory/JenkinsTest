@@ -74,7 +74,31 @@ public class Order{
     private OrderStatus status; //주문상태
     
     public enum OrderStatus {
-		ORDER,
-		CANCEL
+		ORDER, //주문완료
+		CANCEL //주문취소
+    }
+
+    /**
+	 * 주문 제품 추가
+	 * OrderItem 객체에도 연관관계 매핑을 위해 객체를 설정해줘야 해서 선언함
+	 * 
+	 * @param OrderItem orderItem
+	 * @return 
+	 */
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+    /**
+	 * 배송정보 추가
+	 * Delivery 객체에도 연관관계 매핑을 위해 객체를 설정해줘야 해서 선언함
+	 * 
+	 * @param Delivery delivery
+	 * @return 
+	 */
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+        delivery.setOrder(this);
     }
 }

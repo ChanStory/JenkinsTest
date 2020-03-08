@@ -21,6 +21,6 @@ public class OrderParams {
 	
 	private String address; //배송지
 	
-	private List<OrderProductParams> productList; //상품id
+	private List<OrderProductParams> productList; //상품정보
 	
 }

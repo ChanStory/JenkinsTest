@@ -44,7 +44,8 @@ public class Delivery {
     private DeliveryStatus status; //배송상태
     
     public enum DeliveryStatus {
-		READY,
-		DELIVERY
+		READY, 	  //배송준비
+		DELIVERY, //배송중
+		COMPLETE  //배송완료
     }
 }

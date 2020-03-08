@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.myapp.advice.exception.AuthenticationEntryPointException;
 import com.myapp.advice.exception.LoginFailedException;
+import com.myapp.advice.exception.NegativeStockQuantityException;
+import com.myapp.advice.exception.OrderNotFoundException;
 import com.myapp.advice.exception.ParamNameNotFoundException;
 import com.myapp.advice.exception.ProductNotFoundException;
 import com.myapp.advice.exception.UserNotFoundException;
@@ -220,6 +222,48 @@ public class AfterThrowingAdvice {
 	public CommonResult productNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		String code = encodingProperty("exception.productNotFound.code");
 		String msg = encodingProperty("exception.productNotFound.msg");
+		
+		if (log.isErrorEnabled()) {
+			log.error("exception code : {}, msg : {}", code, msg, e);
+		}
+		
+		return responseService.getFailResult(Integer.parseInt(code), msg);
+	}
+	
+	/**
+	 * 조회한 주문이 존재하지 않을 때 발생하는 예외
+	 *  
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 400
+	 */
+	@ExceptionHandler(OrderNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public CommonResult orderNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
+		String code = encodingProperty("exception.orderNotFound.code");
+		String msg = encodingProperty("exception.orderNotFound.msg");
+		
+		if (log.isErrorEnabled()) {
+			log.error("exception code : {}, msg : {}", code, msg, e);
+		}
+		
+		return responseService.getFailResult(Integer.parseInt(code), msg);
+	}
+	
+	/**
+	 * 조회한 주문이 존재하지 않을 때 발생하는 예외
+	 *  
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 400
+	 */
+	@ExceptionHandler(NegativeStockQuantityException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public CommonResult NegativeStockQuantityException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
+		String code = encodingProperty("exception.negativeStockQuantity.code");
+		String msg = encodingProperty("exception.negativeStockQuantity.msg");
 		
 		if (log.isErrorEnabled()) {
 			log.error("exception code : {}, msg : {}", code, msg, e);

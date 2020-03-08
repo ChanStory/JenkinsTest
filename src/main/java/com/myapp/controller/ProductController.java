@@ -45,6 +45,7 @@ public class ProductController {
 	/**
 	 * 전체 상품 조회
 	 * 
+	 * @param X-AUTH-TOKEN
 	 * @param 
 	 * @return ListResult
 	 */
@@ -58,6 +59,7 @@ public class ProductController {
 	/**
 	 * 조건부 상품 조회
 	 * 
+	 * @param X-AUTH-TOKEN
 	 * @param String condition
 	 * @param String value
 	 * @return ListResult
@@ -67,12 +69,14 @@ public class ProductController {
 	@GetMapping("/products/{condition}/{value}")
 	public ListResult<Product> findProducts(@ApiParam(value = "조건명", required = true) @PathVariable String condition, 
 								   			@ApiParam(value = "조건값", required = true) @PathVariable String value) {
+		
 		return responseService.getListResult(productService.findProducts(condition, value));
 	}
 	
 	/**
 	 * 상품 추가
 	 * 
+	 * @param X-AUTH-TOKEN
 	 * @param String name
 	 * @param int price
 	 * @param String description
@@ -95,7 +99,7 @@ public class ProductController {
 	 * 상품 수정
 	 * 
 	 * @param X-AUTH-TOKEN
-	 * @param long msrl
+	 * @param long id
 	 * @param String name
 	 * @param int price
 	 * @param String description
@@ -115,11 +119,11 @@ public class ProductController {
     					 @ApiImplicitParam(name = "brand", value = "브랜드", required = false, dataType = "String", paramType = "query"),
     					 @ApiImplicitParam(name = "stockQuantity", value = "상품수량", required = false, dataType = "int", paramType = "query")})
     @ApiOperation(value = "상품 수정", notes = "상품정보를 수정한다")
-    @PutMapping(value = "/product/{msrl}")
-	public CommonResult modifyProduct( @ApiParam(value = "상품번호", required = true) @PathVariable long msrl,
-								@ApiParam(hidden = true) @RequestParam Map<String, String> updateMap) {
+    @PutMapping(value = "/product/{id}")
+	public CommonResult modifyProduct( @ApiParam(value = "상품번호", required = true) @PathVariable long id,
+									   @ApiParam(hidden = true) @RequestParam Map<String, String> updateMap) {
     	
-    	productService.modifyProduct(msrl, updateMap);
+    	productService.modifyProduct(id, updateMap);
         
         return responseService.getSuccessResult();
     }
@@ -128,13 +132,13 @@ public class ProductController {
 	 * 상품 삭제
 	 * 
 	 * @param X-AUTH-TOKEN
-	 * @param int id
+	 * @param long id
 	 * @return SingleResult
 	 */
     @ApiOperation(value = "상품 삭제", notes = "상품을 삭제한다")
     @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
     @DeleteMapping(value = "/product/{id}")
-    public CommonResult delete( @ApiParam(value = "상품번호", required = true) @PathVariable long id) {
+    public CommonResult deleteProduct( @ApiParam(value = "상품번호", required = true) @PathVariable long id) {
     	productService.deleteProduct(id);
     	
         return responseService.getSuccessResult();

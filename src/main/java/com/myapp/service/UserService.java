@@ -74,6 +74,15 @@ public class UserService {
 	}
 
 	/**
+	 * 회원 조회
+	 * @param String uid
+	 * @return User
+	 */
+	public User findUser(String uid) {       
+		return userRepository.findByUid(uid).orElseThrow(UserNotFoundException::new);
+	}
+	
+	/**
 	 * 회원 수정
 	 * @param long msrl
 	 * @param Map<String, String> updateMap
