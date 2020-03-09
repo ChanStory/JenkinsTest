@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +29,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 /**
  * 주문 엔티티
  * 
@@ -39,6 +39,7 @@ import lombok.Setter;
 @Builder //builder를 사용할수 있게 함
 @Entity
 @Getter @Setter
+@ToString
 @NoArgsConstructor //인자없는 생성자를 자동으로 생성
 @AllArgsConstructor //인자를 모두 갖춘 생성자를 자동으로 생성
 @EntityListeners(AuditingEntityListener.class) // JpaAuditing을 사용할수 있게 해줌
@@ -50,15 +51,15 @@ public class Order{
 	@Column(name = "ORDER_ID")
     private long id; //id
  
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCT_ID")
+    @ManyToOne //직렬화 시 지연로딩이 되면 실제 객체는 들어가 있지 않아 에러발생함
+    @JoinColumn(name = "USER_NUMBER")
     private User user; //주문자
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @Builder.Default
     private List<OrderItem> orderItems = new ArrayList<OrderItem>(); //주문 상품
     
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "DELIVERY_ID")
     private Delivery delivery; //배송정보
     

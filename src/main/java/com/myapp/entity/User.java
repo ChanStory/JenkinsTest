@@ -37,12 +37,12 @@ public class User implements UserDetails {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ApiModelProperty(hidden = true) //swagger문서에 프로퍼티값이 안보이게 함, 유저 객체를 반환해줄 때 msrl값은 같이 넘어가야하기 때문
-	@Column(name = "NUMBER")
+	@Column(name = "USER_NUMBER")
     private long msrl; //유저 넘버
 	
 	@NotNull
 	@Pattern(regexp = "^[a-zA-Z0-9]{5,15}$") //영대.소문자, 숫자만 사용해서 5~15자리
-    @Column(name = "ID", nullable = false, unique = true, length = 15)
+    @Column(name = "USER_ID", nullable = false, unique = true, length = 15)
     private String uid; //유저 아이디
     
 	@NotNull

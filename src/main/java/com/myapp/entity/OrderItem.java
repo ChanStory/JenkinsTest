@@ -2,7 +2,6 @@ package com.myapp.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.myapp.advice.exception.NegativeStockQuantityException;
 
 import lombok.AllArgsConstructor;
@@ -37,11 +37,12 @@ public class OrderItem {
 	@Column(name = "ORDER_ITEM_ID")
     private long id; //id
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "PRODUCT_ID")
 	private Product product; //상품
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+
+	@JsonIgnore //Order 객체가 json으로 serialize 될때 무한루프가 돌아서 ignore해줌
+	@ManyToOne
 	@JoinColumn(name = "ORDER_ID")
 	private Order order; //주문
 	

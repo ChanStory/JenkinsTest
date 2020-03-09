@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +37,7 @@ public class Delivery {
     @Column(name = "DELIVERY_ID")
     private long id; //id
 
+    @JsonIgnore //Order 객체가 json으로 serialize 될때 무한루프가 돌아서 ignore해줌 
     @OneToOne(mappedBy = "delivery")
     private Order order; //주문
 

@@ -65,7 +65,14 @@ public class OrderService {
 			throw new AccessDeniedException("");
 		}
 		
-		return orderRepository.findByUser(user).orElseThrow(UserNotFoundException::new);
+		List<Order> list = orderRepository.findByUser(user).orElseThrow(UserNotFoundException::new);
+		
+		for(Order order : list) {
+			
+			System.out.println(order);
+		}
+		
+		return list;
 	}
 
 	/**
