@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.myapp.advice.exception.AuthenticationEntryPointException;
+import com.myapp.advice.exception.IdDuplicateException;
 import com.myapp.advice.exception.LoginFailedException;
 import com.myapp.advice.exception.NegativeStockQuantityException;
 import com.myapp.advice.exception.OrderNotFoundException;
@@ -52,14 +53,7 @@ public class AfterThrowingAdvice {
 	@ExceptionHandler(Exception.class) 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public CommonResult defaultException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException {
-		String code = encodingProperty("exception.unKnown.code");
-		String msg = encodingProperty("exception.unKnown.msg");
-		
-		if (log.isErrorEnabled()) {
-			log.error("exception code : {}, msg : {}", code, msg, e);
-		}
-		
-		return responseService.getFailResult(Integer.parseInt(code), msg);
+		return exceptionResult("exception.unKnown.code", "exception.unKnown.msg", e);
 	}
 	
 	/**
@@ -73,14 +67,21 @@ public class AfterThrowingAdvice {
 	@ExceptionHandler(UserNotFoundException.class) 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public CommonResult userNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
-		String code = encodingProperty("exception.userNotFound.code");
-		String msg = encodingProperty("exception.userNotFound.msg");
-		
-		if (log.isErrorEnabled()) {
-			log.error("exception code : {}, msg : {}", code, msg, e);
-		}
-		
-		return responseService.getFailResult(Integer.parseInt(code), msg);
+		return exceptionResult("exception.userNotFound.code", "exception.userNotFound.msg", e);
+	}
+	
+	/**
+	 * id중복체크 시 중복된 id가 있으면 발생하는 예외
+	 * 
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 409
+	 */
+	@ExceptionHandler(IdDuplicateException.class) 
+    @ResponseStatus(HttpStatus.CONFLICT)
+	public CommonResult idDuplicateException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
+		return exceptionResult("exception.idDuplicate.code", "exception.idDuplicate.msg", e);
 	}
 	
 	/**
@@ -94,14 +95,7 @@ public class AfterThrowingAdvice {
 	@ExceptionHandler(LoginFailedException.class) 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public CommonResult loginFailedException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
-		String code = encodingProperty("exception.loginFailed.code");
-		String msg = encodingProperty("exception.loginFailed.msg");
-		
-		if (log.isErrorEnabled()) {
-			log.error("exception code : {}, msg : {}", code, msg, e);
-		}
-		
-		return responseService.getFailResult(Integer.parseInt(code), msg);
+		return exceptionResult("exception.loginFailed.code", "exception.loginFailed.msg", e);
 	}
 	
 	/**
@@ -115,14 +109,7 @@ public class AfterThrowingAdvice {
 	@ExceptionHandler(AuthenticationEntryPointException.class) 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public CommonResult authConfigException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
-		String code = encodingProperty("exception.entryPoint.code");
-		String msg = encodingProperty("exception.entryPoint.msg");
-		
-		if (log.isErrorEnabled()) {
-			log.error("exception code : {}, msg : {}", code, msg, e);
-		}
-		
-		return responseService.getFailResult(Integer.parseInt(code), msg);
+		return exceptionResult("exception.entryPoint.code", "exception.entryPoint.msg", e);
 	}
 	
 	/**
@@ -136,14 +123,7 @@ public class AfterThrowingAdvice {
 	@ExceptionHandler(AccessDeniedException.class) 
     @ResponseStatus(HttpStatus.FORBIDDEN)
 	public CommonResult accessDeniedException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
-		String code = encodingProperty("exception.accessDenied.code");
-		String msg = encodingProperty("exception.accessDenied.msg");
-		
-		if (log.isErrorEnabled()) {
-			log.error("exception code : {}, msg : {}", code, msg, e);
-		}
-		
-		return responseService.getFailResult(Integer.parseInt(code), msg);
+		return exceptionResult("exception.accessDenied.code", "exception.accessDenied.msg", e);
 	}
 	
 	/**
@@ -157,14 +137,7 @@ public class AfterThrowingAdvice {
 	@ExceptionHandler(MethodArgumentNotValidException.class)  
     @ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult methodArgumentNotValidException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
-		String code = encodingProperty("exception.methodArgumentNotValid.code");
-		String msg = encodingProperty("exception.methodArgumentNotValid.msg");
-		
-		if (log.isErrorEnabled()) {
-			log.error("exception code : {}, msg : {}", code, msg, e);
-		}
-		
-		return responseService.getFailResult(Integer.parseInt(code), msg);
+		return exceptionResult("exception.methodArgumentNotValid.code", "exception.methodArgumentNotValid.msg", e);
 	}
 	
 	/**
@@ -178,14 +151,7 @@ public class AfterThrowingAdvice {
 	@ExceptionHandler(ValidNotMatchException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult passwordNotMatchException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
-		String code = encodingProperty("exception.methodArgumentNotValid.code");
-		String msg = encodingProperty("exception.methodArgumentNotValid.msg");
-		
-		if (log.isErrorEnabled()) {
-			log.error("exception code : {}, msg : {}", code, msg, e);
-		}
-		
-		return responseService.getFailResult(Integer.parseInt(code), msg);
+		return exceptionResult("exception.methodArgumentNotValid.code", "exception.methodArgumentNotValid.msg", e);
 	}
 	
 	/**
@@ -199,14 +165,7 @@ public class AfterThrowingAdvice {
 	@ExceptionHandler(ParamNameNotFoundException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult paramNameNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
-		String code = encodingProperty("exception.paramNameNotFound.code");
-		String msg = encodingProperty("exception.paramNameNotFound.msg");
-		
-		if (log.isErrorEnabled()) {
-			log.error("exception code : {}, msg : {}", code, msg, e);
-		}
-		
-		return responseService.getFailResult(Integer.parseInt(code), msg);
+		return exceptionResult("exception.paramNameNotFound.code", "exception.paramNameNotFound.msg", e);
 	}
 	
 	/**
@@ -220,14 +179,7 @@ public class AfterThrowingAdvice {
 	@ExceptionHandler(ProductNotFoundException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult productNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
-		String code = encodingProperty("exception.productNotFound.code");
-		String msg = encodingProperty("exception.productNotFound.msg");
-		
-		if (log.isErrorEnabled()) {
-			log.error("exception code : {}, msg : {}", code, msg, e);
-		}
-		
-		return responseService.getFailResult(Integer.parseInt(code), msg);
+		return exceptionResult("exception.productNotFound.code", "exception.productNotFound.msg", e);
 	}
 	
 	/**
@@ -241,18 +193,11 @@ public class AfterThrowingAdvice {
 	@ExceptionHandler(OrderNotFoundException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult orderNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
-		String code = encodingProperty("exception.orderNotFound.code");
-		String msg = encodingProperty("exception.orderNotFound.msg");
-		
-		if (log.isErrorEnabled()) {
-			log.error("exception code : {}, msg : {}", code, msg, e);
-		}
-		
-		return responseService.getFailResult(Integer.parseInt(code), msg);
+		return exceptionResult("exception.orderNotFound.code", "exception.orderNotFound.msg", e);
 	}
 	
 	/**
-	 * 조회한 주문이 존재하지 않을 때 발생하는 예외
+	 * 구매하려는 상품의 갯수가 부족할 때 발생하는 예외
 	 *  
 	 * @param HttpServletRequest request
 	 * @param Exception e
@@ -261,19 +206,37 @@ public class AfterThrowingAdvice {
 	 */
 	@ExceptionHandler(NegativeStockQuantityException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public CommonResult NegativeStockQuantityException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
-		String code = encodingProperty("exception.negativeStockQuantity.code");
-		String msg = encodingProperty("exception.negativeStockQuantity.msg");
-		
-		if (log.isErrorEnabled()) {
-			log.error("exception code : {}, msg : {}", code, msg, e);
-		}
-		
-		return responseService.getFailResult(Integer.parseInt(code), msg);
+	public CommonResult NegativeStockQuantityException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{		
+		return exceptionResult("exception.negativeStockQuantity.code", "exception.negativeStockQuantity.msg", e);
 	}
 	
-	//이클립스, 스프링부트 인코딩 설정, @propertysource 인코딩 속성을 적용해도 한글이 깨져서 일일히 인코딩 변경 해줌..
+	/**
+	 * 에러 로깅, result처리
+	 *  
+	 * @param String code
+	 * @param String msg
+	 * @param Exception e
+	 * @return CommonResult
+	 */
+	private CommonResult exceptionResult(String code, String msg, Exception e) throws UnsupportedEncodingException {
+		String encodingCode = encodingProperty(code);
+		String encodingMsg = encodingProperty(msg);
+		
+		if (log.isErrorEnabled()) {
+			log.error("exception code : {}, msg : {}", encodingCode, encodingMsg, e);
+		}
+		
+		return responseService.getFailResult(Integer.parseInt(encodingCode), encodingMsg);
+	}
+	
+	/**
+	 * 에러코드, 메세지 인코딩
+	 *  
+	 * @param String prop
+	 * @return String
+	 */
 	private String encodingProperty(String prop) throws UnsupportedEncodingException {
+		//이클립스, 스프링부트 인코딩 설정, @propertysource 인코딩 속성을 적용해도 한글이 깨져서 일일히 인코딩 변경 해줌..
 		return new String(env.getProperty(prop).getBytes("ISO-8859-1"), "UTF-8");
 	}
 }

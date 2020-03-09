@@ -71,6 +71,20 @@ public class UserController {
     }
     
     /**
+	 * id중복체크
+	 * 
+	 * @param id
+	 * @return CommonResult
+	 */
+    @ApiOperation(value = "id중복체크", notes = "id중복여부를 검사 한다")
+    @GetMapping(value = "/id-duplicate-check") //회원가입은 권한이 없는 사람도 접근이 가능해야 해서 join으로 매핑
+    public CommonResult idDuplicateCheck( @ApiParam(value = "중복체크할 id", required = true) @RequestParam String id) {
+    	userService.idDuplicateCheck(id);
+        
+    	return responseService.getSuccessResult();
+    }
+    
+    /**
 	 * 전체 회원 조회
 	 * 
 	 * @param X-AUTH-TOKEN

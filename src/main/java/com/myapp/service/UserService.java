@@ -3,6 +3,8 @@ package com.myapp.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.myapp.advice.exception.IdDuplicateException;
 import com.myapp.advice.exception.UserNotFoundException;
 import com.myapp.advice.exception.ValidNotMatchException;
 import com.myapp.dao.UserRepository;
@@ -51,6 +54,23 @@ public class UserService {
 		userRepository.save(user);
 	}
 
+	/**
+	 * id중복체크
+	 * @param String id
+	 * @return 
+	 * @exception IdDuplicateException
+	 */
+	public void idDuplicateCheck(String id) {
+		Optional<User> optionalUser = userRepository.findByUid(id);
+		
+		//입력받은 id로 가입된 회원이 있으면 IdDuplicateException발생
+		try {
+			optionalUser.get();
+			throw new IdDuplicateException();
+		}catch (NoSuchElementException e) {
+		}
+	}
+	
 	/**
 	 * 전체 회원 조회
 	 * @param 
