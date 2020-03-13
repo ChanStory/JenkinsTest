@@ -1,5 +1,7 @@
 package com.myapp.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ public class LoginService {
 	
 	/**
 	 * 로그인
+	 * 
 	 * @param String id
 	 * @param String password
 	 * @return String jwtToken
@@ -40,5 +43,16 @@ public class LoginService {
             throw new LoginFailedException();
         
         return jwtTokenProvider.createToken(user.getUsername(), user.getRoles());
+	}
+
+	/**
+	 * 로그아웃
+	 * 
+	 * @param 
+	 * @return 
+	 */
+	public void logout(HttpServletRequest request) {
+		String token = jwtTokenProvider.resolveToken(request);
+		
 	}
 }
