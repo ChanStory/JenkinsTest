@@ -1,16 +1,21 @@
 package com.myapp.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.myapp.common.CommonResult;
 import com.myapp.common.SingleResult;
 import com.myapp.service.LoginService;
 import com.myapp.service.ResponseService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -51,4 +56,19 @@ public class LoginController {
         return responseService.getSingleResult(jwtToken);
     }
     
+    /**
+	 * 로그아웃
+	 * 
+	 * @param 
+	 * @return CommonResult
+	 */
+    @ApiOperation(value = "로그아웃", notes = "로그아웃을 한다")
+    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
+    @GetMapping(value = "/logout")
+    public CommonResult logout(HttpServletRequest request) {
+ 
+    	loginService.logout(request);
+ 
+        return responseService.getSuccessResult();
+    }
 }
