@@ -29,6 +29,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtTokenProvider {
 
     private String secretKey; //암호화 키
+    
+    private String refreshSecretKey; //리프레쉬 토큰 암호화 키
  
     private long tokenValidMilisecond = 1000L * 60 * 60; //토큰 유효시간 1시간
     
@@ -49,6 +51,7 @@ public class JwtTokenProvider {
 		properties.load(resources);
 		
 		this.secretKey = properties.getProperty("spring.jwt.secret");
+		this.refreshSecretKey = properties.getProperty("spring.jwt.refresh.secret");
     }
     
     /**
@@ -56,9 +59,11 @@ public class JwtTokenProvider {
 	 * 
 	 * @param String userPk
 	 * @param List<String> roles
+	 * @param String type
 	 * @return String token
 	 */
-    public String createToken(String userPk, List<String> roles) {
+    public String createToken(String userPk, List<String> roles, String type) {
+    	String key = type.equals("access") ? secretKey : refreshSecretKey;
         Claims claims = Jwts.claims().setSubject(userPk);
         claims.put("roles", roles);
         Date now = new Date();
@@ -66,7 +71,7 @@ public class JwtTokenProvider {
                 .setClaims(claims) //데이터
                 .setIssuedAt(now) //토큰 발행일자
                 .setExpiration(new Date(now.getTime() + tokenValidMilisecond)) //Expire Time
-                .signWith(SignatureAlgorithm.HS256, secretKey) //암호화 알고리즘, secret값
+                .signWith(SignatureAlgorithm.HS256, key) //암호화 알고리즘, secret값
                 .compact();
     }
  
@@ -74,11 +79,11 @@ public class JwtTokenProvider {
 	 * jwt 토큰으로 인증 정보 조회
 	 * 
 	 * @param String token
+	 * @param String type
 	 * @return Authentication
 	 */
-    public Authentication getAuthentication(String token) {
-    	
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
+    public Authentication getAuthentication(String token, String type) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token, type));
         
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
@@ -87,10 +92,12 @@ public class JwtTokenProvider {
 	 * jwt 토큰에서 회원 구별 정보 추출
 	 * 
 	 * @param String token
+	 * @param String type
 	 * @return String
 	 */
-    public String getUserPk(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    public String getUserPk(String token, String type) {
+    	String key = type.equals("access") ? secretKey : refreshSecretKey;
+        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
     }
  
     /**
@@ -107,12 +114,14 @@ public class JwtTokenProvider {
 	 * jwt 토큰의 유효성, 만료일자 확인
 	 * 
 	 * @param String jwtToken
+	 * @param String type
 	 * @return boolean
 	 */
-    public boolean validateToken(String jwtToken) {
+    public boolean validateToken(String jwtToken, String type) {
         try {
+        	String key = type.equals("access") ? secretKey : refreshSecretKey;
         	
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(jwtToken);
             
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
