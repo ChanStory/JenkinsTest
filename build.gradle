@@ -40,17 +40,13 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	
-	//redis
+	//redis 라이브러리
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'it.ozimov:embedded-redis:0.7.2'
 	
 	//JDBC 라이브러리
 	runtimeOnly 'mysql:mysql-connector-java'
 	//runtimeOnly 'com.h2database:h2:1.4.199'
-	
-	//redis
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'it.ozimov:embedded-redis:0.7.2'
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

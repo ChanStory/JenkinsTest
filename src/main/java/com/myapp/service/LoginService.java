@@ -1,5 +1,8 @@
 package com.myapp.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,18 +34,28 @@ public class LoginService {
 	 * 
 	 * @param String id
 	 * @param String password
-	 * @return String jwtToken
+	 * @return List<String> jwtTokens
 	 */
-	public String login(String id, String password) {
+	public List<String> login(String id, String password) {
 		
 		//입력받은 ID로 유저를 가져온다. 해당ID 유저가 없을 시 UserNotFoundException 발생
         User user = userRepository.findByUid(id).orElseThrow(UserNotFoundException::new);
         
         //입력된 password가 틀릴 시 LoginFailedException 발생
-        if (!passwordEncoder.matches(password, user.getPassword()))
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new LoginFailedException();
+        }
         
-        return jwtTokenProvider.createToken(user.getUsername(), user.getRoles());
+        //access토큰과 refresh토큰 두개를 발급해줌
+        List<String> jwtList = new ArrayList<String>();
+        jwtList.add(jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
+        String refreshToken = jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh");
+        
+        
+        
+        jwtList.add(refreshToken);
+        
+        return jwtList;
 	}
 
 	/**

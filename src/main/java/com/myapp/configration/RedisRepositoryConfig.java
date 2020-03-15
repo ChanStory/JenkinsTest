@@ -1,6 +1,9 @@
 package com.myapp.configration;
 
-import org.springframework.beans.factory.annotation.Value;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -11,19 +14,20 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @Configuration
 @EnableRedisRepositories
 public class RedisRepositoryConfig {
-    @Value("${spring.redis.host}")
-    private String redisHost;
-
-    @Value("${spring.redis.port}")
-    private int redisPort;
-
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(redisHost, redisPort);
+    public RedisConnectionFactory redisConnectionFactory() throws IOException {
+    	//DB에 관한 정보는 외부 properties파일에서 가져옴
+		FileReader resources = new FileReader("DB_JWT_Info.properties");
+		Properties properties = new Properties();
+		
+		properties.load(resources);
+    	
+        return new LettuceConnectionFactory(properties.getProperty("spring.redis.host"), 
+        									Integer.parseInt(properties.getProperty("spring.redis.port")));
     }
 
     @Bean
-    public RedisTemplate<?, ?> redisTemplate() {
+    public RedisTemplate<?, ?> redisTemplate() throws IOException {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         return redisTemplate;

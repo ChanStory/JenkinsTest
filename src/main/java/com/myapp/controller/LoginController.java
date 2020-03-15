@@ -1,5 +1,7 @@
 package com.myapp.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myapp.common.CommonResult;
-import com.myapp.common.SingleResult;
+import com.myapp.common.ListResult;
 import com.myapp.service.LoginService;
 import com.myapp.service.ResponseService;
 
@@ -43,17 +45,17 @@ public class LoginController {
 	 * 
 	 * @param String id
 	 * @param String password
-	 * @return SingleResult
+	 * @return ListResult<String>
 	 */
     @ApiOperation(value = "로그인", notes = "회원 로그인을 한다")
     @GetMapping(value = "/login")
-    public SingleResult<String> login(@ApiParam(value = "id", required = true) @RequestParam String id,
+    public ListResult<String> login(@ApiParam(value = "id", required = true) @RequestParam String id,
                                       @ApiParam(value = "password", required = true) @RequestParam String password) {
  
-    	String jwtToken = loginService.login(id, password);
+    	List<String> jwtTokens = loginService.login(id, password);
  
         //로그인이 성공하면 jwt token을 발급
-        return responseService.getSingleResult(jwtToken);
+        return responseService.getListResult(jwtTokens);
     }
     
     /**
