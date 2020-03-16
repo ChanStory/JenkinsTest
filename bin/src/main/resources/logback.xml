@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 수정시 30초 간격으로 업데이트 됨 -->
+<configuration debug="true" scan="true" scanPeriod="30 seconds">
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.myapp.advice" level="debug" />
+	<logger name="com.myapp.controller" level="debug" />
+	<logger name="com.myapp.service" level="debug" />
+			
+	<!-- level : trace - debug - info - warn - error -->	
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

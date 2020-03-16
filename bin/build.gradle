@@ -1,0 +1,72 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.1.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+}
+
+group = 'com.myapp'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	
+	//jwt토큰 라이브러리
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	
+	//swagger 라이브러리
+	implementation 'io.springfox:springfox-swagger2:2.8.0' 
+	implementation 'io.springfox:springfox-swagger-ui:2.8.0'
+	
+	//lombok 라이브러리
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	
+	//redis 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'it.ozimov:embedded-redis:0.7.2'
+	
+	//JDBC 라이브러리
+	runtimeOnly 'mysql:mysql-connector-java'
+	//runtimeOnly 'com.h2database:h2:1.4.199'
+	
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+//github push 시에 jennkins로 빌드해 aws에 자동으로 배포되기 위해 jar파일을 생성함
+bootJar {
+    archiveBaseName = 'myapp'
+    archiveFileName = 'myapp.jar'
+}
+
+
+test {
+	useJUnitPlatform()
+}
+
+task print(){
+	doLast{
+		println "github push complete"
+	}
+}
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'

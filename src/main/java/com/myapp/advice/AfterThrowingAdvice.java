@@ -19,6 +19,7 @@ import com.myapp.advice.exception.NegativeStockQuantityException;
 import com.myapp.advice.exception.OrderNotFoundException;
 import com.myapp.advice.exception.ParamNameNotFoundException;
 import com.myapp.advice.exception.ProductNotFoundException;
+import com.myapp.advice.exception.TokenExpiredException;
 import com.myapp.advice.exception.UserNotFoundException;
 import com.myapp.advice.exception.ValidNotMatchException;
 import com.myapp.common.CommonResult;
@@ -208,6 +209,20 @@ public class AfterThrowingAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult NegativeStockQuantityException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{		
 		return exceptionResult("exception.negativeStockQuantity.code", "exception.negativeStockQuantity.msg", e);
+	}
+	
+	/**
+	 * 구매하려는 상품의 갯수가 부족할 때 발생하는 예외
+	 *  
+	 * @param HttpServletRequest request
+	 * @param Exception e
+	 * @return CommonResult
+	 * @responseStatus 401
+	 */
+	@ExceptionHandler(TokenExpiredException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public CommonResult TokenExpiredException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{		
+		return exceptionResult("exception.tokenExpired.code", "exception.tokenExpired.msg", e);
 	}
 	
 	/**

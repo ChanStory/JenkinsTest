@@ -1,7 +1,7 @@
 package com.myapp.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,8 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.myapp.advice.exception.LoginFailedException;
-import com.myapp.advice.exception.UserNotFoundException;
-import com.myapp.dao.UserRepository;
 import com.myapp.entity.User;
 import com.myapp.security.JwtTokenProvider;
 
@@ -25,8 +23,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class LoginService {
 
-	private final UserRepository userRepository;
+	private final UserService userService;
+	
     private final PasswordEncoder passwordEncoder;
+    
     private final JwtTokenProvider jwtTokenProvider;
 	
 	/**
@@ -34,12 +34,11 @@ public class LoginService {
 	 * 
 	 * @param String id
 	 * @param String password
-	 * @return List<String> jwtTokens
+	 * @return Map<String, String>
 	 */
-	public List<String> login(String id, String password) {
-		
-		//입력받은 ID로 유저를 가져온다. 해당ID 유저가 없을 시 UserNotFoundException 발생
-        User user = userRepository.findByUid(id).orElseThrow(UserNotFoundException::new);
+	public Map<String, String> login(String id, String password) {
+		//입력받은 ID로 유저를 가져온다
+        User user = userService.findUser(id);
         
         //입력된 password가 틀릴 시 LoginFailedException 발생
         if (!passwordEncoder.matches(password, user.getPassword())) {
@@ -47,21 +46,32 @@ public class LoginService {
         }
         
         //access토큰과 refresh토큰 두개를 발급해줌
-        List<String> jwtList = new ArrayList<String>();
-        jwtList.add(jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
-        String refreshToken = jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh");
+        Map<String, String> jwtMap = new HashMap<String, String>();
+        jwtMap.put("access", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
+        jwtMap.put("refresh", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh"));
         
-        
-        
-        jwtList.add(refreshToken);
-        
-        return jwtList;
+        return jwtMap;
 	}
 
 	/**
+	 * 리프레쉬 토큰 로그인
+	 * 
+	 * @param HttpServletRequest request
+	 * @return Map<String, String>
+	 */
+	public Map<String, String> refreshLogin(HttpServletRequest request) {
+		User user = userService.findUser();
+		
+		Map<String, String> jwtMap = new HashMap<String, String>();
+        jwtMap.put("access", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
+		
+		return jwtMap;
+	}
+	
+	/**
 	 * 로그아웃
 	 * 
-	 * @param 
+	 * @param HttpServletRequest request
 	 * @return 
 	 */
 	public void logout(HttpServletRequest request) {

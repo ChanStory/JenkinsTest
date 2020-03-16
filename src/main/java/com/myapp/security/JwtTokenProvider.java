@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import com.myapp.advice.exception.TokenExpiredException;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -32,7 +34,9 @@ public class JwtTokenProvider {
     
     private String refreshSecretKey; //리프레쉬 토큰 암호화 키
  
-    private long tokenValidMilisecond = 1000L * 60 * 60; //토큰 유효시간 1시간
+    private long accessTokenValidMilisecond = 1000L * 60 * 60; //토큰 유효시간 1시간
+    
+    private long refreshTokenValidMilisecond = 1000L * 60 * 60 * 24 * 7; //refresh토큰 유효기간 1주일
     
     private UserDetailsService userDetailsService;
     
@@ -64,6 +68,8 @@ public class JwtTokenProvider {
 	 */
     public String createToken(String userPk, List<String> roles, String type) {
     	String key = type.equals("access") ? secretKey : refreshSecretKey;
+    	long tokenValidMilisecond = type.equals("access") ? accessTokenValidMilisecond : refreshTokenValidMilisecond;
+    	
         Claims claims = Jwts.claims().setSubject(userPk);
         claims.put("roles", roles);
         Date now = new Date();
@@ -74,7 +80,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, key) //암호화 알고리즘, secret값
                 .compact();
     }
- 
+
     /**
 	 * jwt 토큰으로 인증 정보 조회
 	 * 
@@ -116,6 +122,7 @@ public class JwtTokenProvider {
 	 * @param String jwtToken
 	 * @param String type
 	 * @return boolean
+	 * @exception TokenExpiredException
 	 */
     public boolean validateToken(String jwtToken, String type) {
         try {
@@ -123,7 +130,14 @@ public class JwtTokenProvider {
         	
             Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(jwtToken);
             
-            return !claims.getBody().getExpiration().before(new Date());
+            boolean tokenExpired = claims.getBody().getExpiration().before(new Date());
+            
+            //토큰의 만료일자가 지났을 때
+            if(tokenExpired) {
+            	throw new TokenExpiredException();
+            }
+            
+            return !tokenExpired;
         } catch (Exception e) {
             return false;
         }

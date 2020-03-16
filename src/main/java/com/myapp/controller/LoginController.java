@@ -1,6 +1,6 @@
 package com.myapp.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myapp.common.CommonResult;
-import com.myapp.common.ListResult;
+import com.myapp.common.SingleResult;
 import com.myapp.service.LoginService;
 import com.myapp.service.ResponseService;
 
@@ -45,19 +45,36 @@ public class LoginController {
 	 * 
 	 * @param String id
 	 * @param String password
-	 * @return ListResult<String>
+	 * @return SingleResult<Map<String, String>>
 	 */
     @ApiOperation(value = "로그인", notes = "회원 로그인을 한다")
     @GetMapping(value = "/login")
-    public ListResult<String> login(@ApiParam(value = "id", required = true) @RequestParam String id,
-                                      @ApiParam(value = "password", required = true) @RequestParam String password) {
+    public SingleResult<Map<String, String>> login(@ApiParam(value = "id", required = true) @RequestParam String id,
+                                      			   @ApiParam(value = "password", required = true) @RequestParam String password) {
  
-    	List<String> jwtTokens = loginService.login(id, password);
+    	Map<String, String> jwtTokens = loginService.login(id, password);
  
         //로그인이 성공하면 jwt token을 발급
-        return responseService.getListResult(jwtTokens);
+        return responseService.getSingleResult(jwtTokens);
     }
     
+    /**
+   	 * 리프레쉬 토큰 로그인
+   	 * 
+   	 * @param X-AUTH-TOKEN
+   	 * @param HttpServletRequest request
+   	 * @return SingleResult<Map<String, String>>
+   	 */
+    @ApiOperation(value = "리프레쉬 토큰 로그인", notes = "리프레쉬 토큰으로 로그인을 한다")
+    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "refresh_token", required = true, dataType = "String", paramType = "header") })
+    @GetMapping(value = "/login/refresh")
+    public SingleResult<Map<String, String>> refreshLogin(HttpServletRequest request) {
+    	Map<String, String> jwtToken = loginService.refreshLogin(request);
+    	
+    	//로그인이 성공하면 jwt access token을 발급
+        return responseService.getSingleResult(jwtToken);
+	}
+       
     /**
 	 * 로그아웃
 	 * 
@@ -65,7 +82,7 @@ public class LoginController {
 	 * @return CommonResult
 	 */
     @ApiOperation(value = "로그아웃", notes = "로그아웃을 한다")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
+    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "access_token", required = true, dataType = "String", paramType = "header") })
     @GetMapping(value = "/logout")
     public CommonResult logout(HttpServletRequest request) {
  
@@ -73,4 +90,6 @@ public class LoginController {
  
         return responseService.getSuccessResult();
     }
+    
+    
 }
