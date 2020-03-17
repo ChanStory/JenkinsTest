@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,8 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
     
     private final JwtTokenProvider jwtTokenProvider;
+    
+    private final RedisTemplate<String, Object> redisTemplate;
 	
 	/**
 	 * 로그인
@@ -77,5 +81,8 @@ public class LoginService {
 	public void logout(HttpServletRequest request) {
 		String token = jwtTokenProvider.resolveToken(request);
 		
+		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
+        //vop.set("test", token);
+        System.out.println((String)vop.get("test"));
 	}
 }
