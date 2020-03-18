@@ -8,9 +8,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
+
+import com.myapp.advice.exception.TokenExpiredException;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * JWT 토큰 검증 필터
@@ -18,28 +24,37 @@ import org.springframework.web.filter.GenericFilterBean;
  * @author chans
  */
 
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean {
 	 
-    private JwtTokenProvider jwtTokenProvider;
- 
-    //jwt provier 주입
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+    private final JwtTokenProvider jwtTokenProvider;
 
+    private final RedisTemplate<String, String> redisTemplate;
+    
     //Request로 넘어오는 Jwt Token의 유효성을 검증하는 filter를 filterChain에 등록
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
+        String accessToken = jwtTokenProvider.resolveAccessToken((HttpServletRequest) request);
+        String refreshToken = jwtTokenProvider.resolveRefreshToken((HttpServletRequest) request);
         
-        if(token != null && jwtTokenProvider.validateToken(token, "access")) {
+        ValueOperations<String, String> vop = redisTemplate.opsForValue();
+        
+        if(accessToken != null && jwtTokenProvider.validateToken(accessToken, "access")) {
+        	//로그아웃으로 만료된 토큰일경우 
+        	if(accessToken.equals("access-" + vop.get(jwtTokenProvider.getUserPk(accessToken, "access")))) {
+        		throw new TokenExpiredException();
+        	}
         	
-            Authentication auth = jwtTokenProvider.getAuthentication(token, "access");
+            Authentication auth = jwtTokenProvider.getAuthentication(accessToken, "access");
             SecurityContextHolder.getContext().setAuthentication(auth);
             
-        }else if(token != null && jwtTokenProvider.validateToken(token, "refresh")) {
-        	
-        	Authentication auth = jwtTokenProvider.getAuthentication(token, "refresh");
+        }else if(refreshToken != null && jwtTokenProvider.validateToken(refreshToken, "refresh")) {
+        	//로그아웃으로 만료된 토큰일경우
+			if(refreshToken.equals("refresh-" + vop.get(jwtTokenProvider.getUserPk(accessToken, "refresh")))) {
+				throw new TokenExpiredException();
+			}
+			
+        	Authentication auth = jwtTokenProvider.getAuthentication(refreshToken, "refresh");
             SecurityContextHolder.getContext().setAuthentication(auth);
             
         }

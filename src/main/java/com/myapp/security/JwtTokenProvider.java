@@ -112,10 +112,20 @@ public class JwtTokenProvider {
 	 * @param HttpServletRequest req
 	 * @return String
 	 */
-    public String resolveToken(HttpServletRequest req) {
+    public String resolveAccessToken(HttpServletRequest req) {
         return req.getHeader("X-AUTH-TOKEN");
     }
  
+    /**
+	 * X-AUTH-REFRESH-TOKEN 파싱
+	 * 
+	 * @param HttpServletRequest req
+	 * @return String
+	 */
+    public String resolveRefreshToken(HttpServletRequest req) {
+        return req.getHeader("X-AUTH-REFRESH-TOKEN");
+    }
+    
     /**
 	 * jwt 토큰의 유효성, 만료일자 확인
 	 * 

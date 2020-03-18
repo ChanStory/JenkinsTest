@@ -66,7 +66,7 @@ public class LoginController {
    	 * @return SingleResult<Map<String, String>>
    	 */
     @ApiOperation(value = "리프레쉬 토큰 로그인", notes = "리프레쉬 토큰으로 로그인을 한다")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "refresh_token", required = true, dataType = "String", paramType = "header") })
+    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-REFRESH-TOKEN", value = "refresh_token", required = true, dataType = "String", paramType = "header") })
     @GetMapping(value = "/login/refresh")
     public SingleResult<Map<String, String>> refreshLogin(HttpServletRequest request) {
     	Map<String, String> jwtToken = loginService.refreshLogin(request);
@@ -82,7 +82,8 @@ public class LoginController {
 	 * @return CommonResult
 	 */
     @ApiOperation(value = "로그아웃", notes = "로그아웃을 한다")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "access_token", required = true, dataType = "String", paramType = "header") })
+    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "access_token", required = true, dataType = "String", paramType = "header"),
+    					 @ApiImplicitParam(name = "X-AUTH-REFRESH-TOKEN", value = "refresh_token", required = true, dataType = "String", paramType = "header")})
     @GetMapping(value = "/logout")
     public CommonResult logout(HttpServletRequest request) {
  

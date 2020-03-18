@@ -31,7 +31,7 @@ public class LoginService {
     
     private final JwtTokenProvider jwtTokenProvider;
     
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 	
 	/**
 	 * 로그인
@@ -79,10 +79,11 @@ public class LoginService {
 	 * @return 
 	 */
 	public void logout(HttpServletRequest request) {
-		String token = jwtTokenProvider.resolveToken(request);
+		String accessToken = jwtTokenProvider.resolveAccessToken(request);
+		String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
 		
-		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
-        //vop.set("test", token);
-        System.out.println((String)vop.get("test"));
+		ValueOperations<String, String> vop = redisTemplate.opsForValue();
+        vop.set("access-" + jwtTokenProvider.getUserPk(accessToken, "access"), accessToken);
+        vop.set("refresh-" + jwtTokenProvider.getUserPk(refreshToken, "refresh"), refreshToken);
 	}
 }

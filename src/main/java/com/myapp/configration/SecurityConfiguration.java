@@ -2,6 +2,7 @@ package com.myapp.configration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -29,6 +30,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	// 접속 시 인증을 JWT로 하기위해
     private final JwtTokenProvider jwtTokenProvider;
     
+    private final RedisTemplate<String, String> redisTemplate;
+    
     //스프링 시큐리티에서 인증을 담당하는 컴포넌트
     @Bean
     @Override
@@ -52,7 +55,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
                 .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()) //리소스에 접근하기 위한 권한이 모자를 시 처리하는 핸들러
             .and()
-				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider) , UsernamePasswordAuthenticationFilter.class ); //jwt token 필터를 id, password 인증 필터 전에 넣어준다
+				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate) , UsernamePasswordAuthenticationFilter.class ); //jwt token 필터를 id, password 인증 필터 전에 넣어준다
  
     }
  
