@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -39,10 +40,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
         
+        HttpServletResponse httpResponse= (HttpServletResponse) response;
+        
         if(accessToken != null && jwtTokenProvider.validateToken(accessToken, "access")) {
         	//로그아웃으로 만료된 토큰일경우 
-        	if(accessToken.equals("access-" + vop.get(jwtTokenProvider.getUserPk(accessToken, "access")))) {
-        		throw new TokenExpiredException();
+        	if(accessToken.equals(vop.get("access-" + jwtTokenProvider.getUserPk(accessToken, "access")))) {
+        		httpResponse.sendRedirect("/exception/token-expired");
         	}
         	
             Authentication auth = jwtTokenProvider.getAuthentication(accessToken, "access");
@@ -50,8 +53,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             
         }else if(refreshToken != null && jwtTokenProvider.validateToken(refreshToken, "refresh")) {
         	//로그아웃으로 만료된 토큰일경우
-			if(refreshToken.equals("refresh-" + vop.get(jwtTokenProvider.getUserPk(accessToken, "refresh")))) {
-				throw new TokenExpiredException();
+			if(refreshToken.equals(vop.get("refresh-" + jwtTokenProvider.getUserPk(refreshToken, "refresh")))) {
+				httpResponse.sendRedirect("/exception/token-expired");
 			}
 			
         	Authentication auth = jwtTokenProvider.getAuthentication(refreshToken, "refresh");
