@@ -5,11 +5,9 @@ import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.myapp.advice.exception.AuthenticationEntryPointException;
@@ -49,10 +47,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 500
 	 */
 	@ExceptionHandler(Exception.class) 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public CommonResult defaultException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException {
 		return exceptionResult("exception.unKnown.code", "exception.unKnown.msg", e);
 	}
@@ -63,10 +59,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 401
 	 */
-	@ExceptionHandler(UserNotFoundException.class) 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(UserNotFoundException.class)
 	public CommonResult userNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		return exceptionResult("exception.userNotFound.code", "exception.userNotFound.msg", e);
 	}
@@ -77,10 +71,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 409
 	 */
 	@ExceptionHandler(IdDuplicateException.class) 
-    @ResponseStatus(HttpStatus.CONFLICT)
 	public CommonResult idDuplicateException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		return exceptionResult("exception.idDuplicate.code", "exception.idDuplicate.msg", e);
 	}
@@ -91,10 +83,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 401
 	 */
 	@ExceptionHandler(LoginFailedException.class) 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public CommonResult loginFailedException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		return exceptionResult("exception.loginFailed.code", "exception.loginFailed.msg", e);
 	}
@@ -105,10 +95,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 401
 	 */
-	@ExceptionHandler(AuthenticationEntryPointException.class) 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(AuthenticationEntryPointException.class)
 	public CommonResult authConfigException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		return exceptionResult("exception.entryPoint.code", "exception.entryPoint.msg", e);
 	}
@@ -119,10 +107,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 403
 	 */
-	@ExceptionHandler(AccessDeniedException.class) 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+	@ExceptionHandler(AccessDeniedException.class)
 	public CommonResult accessDeniedException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		return exceptionResult("exception.accessDenied.code", "exception.accessDenied.msg", e);
 	}
@@ -133,10 +119,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 400
 	 */
-	@ExceptionHandler(MethodArgumentNotValidException.class)  
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public CommonResult methodArgumentNotValidException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		return exceptionResult("exception.methodArgumentNotValid.code", "exception.methodArgumentNotValid.msg", e);
 	}
@@ -147,10 +131,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 400
 	 */
 	@ExceptionHandler(ValidNotMatchException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult passwordNotMatchException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		return exceptionResult("exception.methodArgumentNotValid.code", "exception.methodArgumentNotValid.msg", e);
 	}
@@ -161,10 +143,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 400
 	 */
 	@ExceptionHandler(ParamNameNotFoundException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult paramNameNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		return exceptionResult("exception.paramNameNotFound.code", "exception.paramNameNotFound.msg", e);
 	}
@@ -175,10 +155,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 400
 	 */
 	@ExceptionHandler(ProductNotFoundException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult productNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		return exceptionResult("exception.productNotFound.code", "exception.productNotFound.msg", e);
 	}
@@ -189,10 +167,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 400
 	 */
 	@ExceptionHandler(OrderNotFoundException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult orderNotFoundException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{
 		return exceptionResult("exception.orderNotFound.code", "exception.orderNotFound.msg", e);
 	}
@@ -203,10 +179,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 400
 	 */
 	@ExceptionHandler(NegativeStockQuantityException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public CommonResult NegativeStockQuantityException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{		
 		return exceptionResult("exception.negativeStockQuantity.code", "exception.negativeStockQuantity.msg", e);
 	}
@@ -217,10 +191,8 @@ public class AfterThrowingAdvice {
 	 * @param HttpServletRequest request
 	 * @param Exception e
 	 * @return CommonResult
-	 * @responseStatus 401
 	 */
 	@ExceptionHandler(TokenExpiredException.class)
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public CommonResult TokenExpiredException(HttpServletRequest request, Exception e) throws UnsupportedEncodingException{		
 		return exceptionResult("exception.tokenExpired.code", "exception.tokenExpired.msg", e);
 	}

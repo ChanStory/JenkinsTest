@@ -77,8 +77,8 @@ public class UserController {
 	 * @return CommonResult
 	 */
     @ApiOperation(value = "id중복체크", notes = "id중복여부를 검사 한다")
-    @GetMapping(value = "/user/duplicate-check") //회원가입은 권한이 없는 사람도 접근이 가능해야 해서 join으로 매핑
-    public CommonResult idDuplicateCheck( @ApiParam(value = "중복체크할 id", required = true) @RequestParam String id) {
+    @GetMapping(value = "/user/duplicate-check/{id}") //회원가입은 권한이 없는 사람도 접근이 가능해야 해서 join으로 매핑
+    public CommonResult idDuplicateCheck( @ApiParam(value = "중복체크할 id", required = true) @PathVariable String id) {
     	userService.idDuplicateCheck(id);
         
     	return responseService.getSuccessResult();

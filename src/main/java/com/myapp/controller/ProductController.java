@@ -50,7 +50,6 @@ public class ProductController {
 	 * @return ListResult
 	 */
 	@ApiOperation(value = "전체 상품 조회", notes = "전체 상품을 조회함")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
 	@GetMapping("/products")
 	public ListResult<Product> findAllProdects() {
 		return responseService.getListResult(productService.findAllProdects());
@@ -65,7 +64,6 @@ public class ProductController {
 	 * @return ListResult
 	 */
 	@ApiOperation(value = "조건부 상품 조회", notes = "요청받은 조건으로 상품을 조회함")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
 	@GetMapping("/products/{condition}/{value}")
 	public ListResult<Product> findProducts(@ApiParam(value = "조건명", required = true) @PathVariable String condition, 
 								   			@ApiParam(value = "조건값", required = true) @PathVariable String value) {
