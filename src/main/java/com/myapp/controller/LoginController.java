@@ -3,6 +3,7 @@ package com.myapp.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,13 +50,14 @@ public class LoginController {
 	 */
     @ApiOperation(value = "로그인", notes = "회원 로그인을 한다")
     @GetMapping(value = "/login")
-    public SingleResult<Map<String, String>> login(@ApiParam(value = "id", required = true) @RequestParam String id,
-                                      			   @ApiParam(value = "password", required = true) @RequestParam String password) {
+    public SingleResult login(@ApiParam(value = "id", required = true) @RequestParam String id,
+                                      			   @ApiParam(value = "password", required = true) @RequestParam String password,
+                                      			   HttpServletResponse response) {
  
-    	Map<String, String> jwtTokens = loginService.login(id, password);
- 
+    	//Map<String, String> jwtTokens = loginService.login(id, password, response);
+    	
         //로그인이 성공하면 jwt token을 발급
-        return responseService.getSingleResult(jwtTokens);
+        return responseService.getSingleResult("");
     }
     
     /**

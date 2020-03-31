@@ -3,12 +3,16 @@ package com.myapp.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.PatternMatchUtils;
+import org.springframework.web.util.CookieGenerator;
 
 import com.myapp.advice.exception.LoginFailedException;
 import com.myapp.entity.User;
@@ -40,7 +44,7 @@ public class LoginService {
 	 * @param String password
 	 * @return Map<String, String>
 	 */
-	public Map<String, String> login(String id, String password) {
+	public void login(String id, String password, HttpServletResponse response) {
 		//입력받은 ID로 유저를 가져온다
         User user = userService.findUser(id);
         
@@ -49,12 +53,22 @@ public class LoginService {
             throw new LoginFailedException();
         }
         
-        //access토큰과 refresh토큰 두개를 발급해줌
-        Map<String, String> jwtMap = new HashMap<String, String>();
-        jwtMap.put("access", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
-        jwtMap.put("refresh", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh"));
+        CookieGenerator cg = new CookieGenerator();
+		cg.setCookieName("X-AUTH-TOKEN");
+		cg.setCookieDomain("localhost:3000");
+		cg.setCookieMaxAge(60 * 60 * 24 * 365);
+		cg.addCookie(response, jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
+		
+		
+//        response.addCookie(new Cookie("X-AUTH-TOKEN", );
+//        response.addCookie(new Cookie("X-AUTH-REFRESH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh")));
         
-        return jwtMap;
+        //access토큰과 refresh토큰 두개를 발급해줌
+//        Map<String, String> jwtMap = new HashMap<String, String>();
+//        jwtMap.put("access", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
+//        jwtMap.put("refresh", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh"));
+        
+//        return jwtMap;
 	}
 
 	/**
