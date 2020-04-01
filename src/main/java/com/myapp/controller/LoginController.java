@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Api(tags = {"1. Login"})
 @Slf4j
-@CrossOrigin(origins = "*", allowedHeaders = "*")//크로스 도메인 해결을 위한 어노테이션
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "http://localhost:3000")//크로스 도메인 해결을 위한 어노테이션
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/v1")
@@ -55,7 +55,7 @@ public class LoginController {
                                       			   HttpServletResponse response) {
  
     	//Map<String, String> jwtTokens = loginService.login(id, password, response);
-    	
+    	loginService.login(id, password, response);
         //로그인이 성공하면 jwt token을 발급
         return responseService.getSingleResult("");
     }

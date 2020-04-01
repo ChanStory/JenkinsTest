@@ -53,16 +53,18 @@ public class LoginService {
             throw new LoginFailedException();
         }
         
-        CookieGenerator cg = new CookieGenerator();
-		cg.setCookieName("X-AUTH-TOKEN");
-		cg.setCookieDomain("localhost:3000");
-		cg.setCookieMaxAge(60 * 60 * 24 * 365);
-		cg.addCookie(response, jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
-		
-		
-//        response.addCookie(new Cookie("X-AUTH-TOKEN", );
-//        response.addCookie(new Cookie("X-AUTH-REFRESH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh")));
+//        CookieGenerator cg = new CookieGenerator();
+//		cg.setCookieName("X-AUTH-TOKEN");
+//		cg.setCookieMaxAge(60 * 60 * 24 * 365);
+//		cg.addCookie(response, jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
         
+        Cookie cookie = new Cookie("X-AUTH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
+        cookie.setMaxAge(60 * 60 * 24* 14);
+        response.addCookie(cookie);
+        response.addHeader("Access-Control-Allow-Credentials", "true");
+        //response.addCookie(new Cookie("X-AUTH-REFRESH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh")));
+        
+        System.out.println("cookie setting");
         //access토큰과 refresh토큰 두개를 발급해줌
 //        Map<String, String> jwtMap = new HashMap<String, String>();
 //        jwtMap.put("access", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
