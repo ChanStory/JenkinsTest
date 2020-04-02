@@ -11,8 +11,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.PatternMatchUtils;
-import org.springframework.web.util.CookieGenerator;
 
 import com.myapp.advice.exception.LoginFailedException;
 import com.myapp.entity.User;
@@ -53,24 +51,11 @@ public class LoginService {
             throw new LoginFailedException();
         }
         
-//        CookieGenerator cg = new CookieGenerator();
-//		cg.setCookieName("X-AUTH-TOKEN");
-//		cg.setCookieMaxAge(60 * 60 * 24 * 365);
-//		cg.addCookie(response, jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
-        
         Cookie cookie = new Cookie("X-AUTH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
         cookie.setMaxAge(60 * 60 * 24* 14);
+        cookie.setHttpOnly(true);
         response.addCookie(cookie);
-        response.addHeader("Access-Control-Allow-Credentials", "true");
-        //response.addCookie(new Cookie("X-AUTH-REFRESH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh")));
         
-        System.out.println("cookie setting");
-        //access토큰과 refresh토큰 두개를 발급해줌
-//        Map<String, String> jwtMap = new HashMap<String, String>();
-//        jwtMap.put("access", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
-//        jwtMap.put("refresh", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh"));
-        
-//        return jwtMap;
 	}
 
 	/**

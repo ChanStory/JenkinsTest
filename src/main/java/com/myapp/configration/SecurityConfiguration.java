@@ -9,7 +9,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
 
+import com.myapp.security.CorsFilter;
 import com.myapp.security.CustomAccessDeniedHandler;
 import com.myapp.security.CustomAuthenticationEntryPoint;
 import com.myapp.security.JwtAuthenticationFilter;
@@ -39,6 +41,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
  
+    @Bean
+    CorsFilter corsFilter() {
+        CorsFilter filter = new CorsFilter();
+        return filter;
+    }
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -56,7 +64,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
                 .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler()) //리소스에 접근하기 위한 권한이 모자를 시 처리하는 핸들러
             .and()
-				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate) , UsernamePasswordAuthenticationFilter.class ); //jwt token 필터를 id, password 인증 필터 전에 넣어준다
+				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate) , UsernamePasswordAuthenticationFilter.class ) //jwt token 필터를 id, password 인증 필터 전에 넣어준다
+				.addFilterBefore(corsFilter(), SessionManagementFilter.class);
  
     }
  

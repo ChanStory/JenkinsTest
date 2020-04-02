@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +39,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Api(tags = {"2. User"})
 @Slf4j
-@CrossOrigin(origins = "*", allowedHeaders = "*")//크로스 도메인 해결을 위한 어노테이션
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/v1")

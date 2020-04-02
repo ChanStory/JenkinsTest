@@ -2,7 +2,6 @@ package com.myapp.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +34,6 @@ import lombok.RequiredArgsConstructor;
  */
 
 @Api(tags = {"4. Order"})
-@CrossOrigin(origins = "*", allowedHeaders = "*")//크로스 도메인 해결을 위한 어노테이션
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/v1")
