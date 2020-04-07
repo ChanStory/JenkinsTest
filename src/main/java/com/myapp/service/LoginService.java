@@ -51,11 +51,9 @@ public class LoginService {
             throw new LoginFailedException();
         }
         
-        Cookie cookie = new Cookie("X-AUTH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
-        cookie.setMaxAge(60 * 60 * 24* 14);
-        cookie.setHttpOnly(true);
-        response.addCookie(cookie);
-        
+        //로그인이 성공하면 X-AUTH-TOKEN, X-AUTH-REFRESH-TOKEN을 세팅해줌
+        setCookie(response, "X-AUTH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
+        setCookie(response, "X-AUTH-REFRESH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh"));
 	}
 
 	/**
@@ -80,11 +78,34 @@ public class LoginService {
 	 * @return 
 	 */
 	public void logout(HttpServletRequest request) {
-		String accessToken = jwtTokenProvider.resolveAccessToken(request);
-		String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
-		
-		ValueOperations<String, String> vop = redisTemplate.opsForValue();
-        vop.set("access-" + jwtTokenProvider.getUserPk(accessToken, "access"), accessToken);
-        vop.set("refresh-" + jwtTokenProvider.getUserPk(refreshToken, "refresh"), refreshToken);
+    	Cookie[] cookies = request.getCookies();
+    	
+    	System.out.println("logoutService cookies : " + cookies);
+    	
+    	for(Cookie cookie : cookies) {
+    		System.out.println("cookie name : " + cookie.getName() + ", value : " + cookie.getValue());
+    	}
+    	
+//		String accessToken = jwtTokenProvider.resolveAccessToken(request);
+//		String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
+//		
+//		ValueOperations<String, String> vop = redisTemplate.opsForValue();
+//        vop.set("access-" + jwtTokenProvider.getUserPk(accessToken, "access"), accessToken);
+//        vop.set("refresh-" + jwtTokenProvider.getUserPk(refreshToken, "refresh"), refreshToken);
+	}
+	
+	/**
+	 * 쿠키 세팅
+	 * 
+	 * @param HttpServletRequest response
+	 * @param String name
+	 * @param String value
+	 * @return 
+	 */
+	public void setCookie(HttpServletResponse response, String name, String value) {
+		Cookie cookie = new Cookie(name, value);
+		cookie.setMaxAge(60 * 60 * 24* 14);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
 	}
 }

@@ -44,18 +44,17 @@ public class LoginController {
 	 * 
 	 * @param String id
 	 * @param String password
-	 * @return SingleResult<Map<String, String>>
+	 * @return CommonResult
 	 */
     @ApiOperation(value = "로그인", notes = "회원 로그인을 한다")
     @GetMapping(value = "/login")
-    public SingleResult login(@ApiParam(value = "id", required = true) @RequestParam String id,
-                                      			   @ApiParam(value = "password", required = true) @RequestParam String password,
-                                      			   HttpServletResponse response) {
+    public CommonResult login(@ApiParam(value = "id", required = true) @RequestParam String id,
+                  			  @ApiParam(value = "password", required = true) @RequestParam String password,
+                  			  HttpServletResponse response) {
  
-    	//Map<String, String> jwtTokens = loginService.login(id, password, response);
     	loginService.login(id, password, response);
-        //로그인이 성공하면 jwt token을 발급
-        return responseService.getSingleResult("");
+
+        return responseService.getSuccessResult();
     }
     
     /**
