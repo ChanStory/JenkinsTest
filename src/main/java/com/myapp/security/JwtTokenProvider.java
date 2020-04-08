@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 import com.myapp.advice.exception.TokenExpiredException;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -101,29 +103,57 @@ public class JwtTokenProvider {
 	 * @param String type
 	 * @return String
 	 */
-    public String getUserPk(String token, String type) {
+    public String getUserPk(String token, String type){
     	String key = type.equals("access") ? secretKey : refreshSecretKey;
-        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
+    	String userPk = null;
+    	
+    	try {
+    		userPk = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
+        } catch (ExpiredJwtException e) {
+        	throw new TokenExpiredException();
+        }
+    	
+        return userPk;
     }
  
     /**
 	 * X-AUTH-TOKEN 파싱
 	 * 
-	 * @param HttpServletRequest req
+	 * @param HttpServletRequest request
 	 * @return String
 	 */
-    public String resolveAccessToken(HttpServletRequest req) {
-        return req.getHeader("X-AUTH-TOKEN");
+    public String resolveAccessToken(HttpServletRequest request) {
+    	Cookie[] cookies = request.getCookies();
+    	
+    	if(cookies != null) {
+    		for(Cookie cookie : cookies) {    		
+        		if(cookie.getName().equals("X-AUTH-TOKEN")) {
+        			return cookie.getValue();
+        		}
+        	}
+    	}
+    	
+        return null;
     }
  
     /**
 	 * X-AUTH-REFRESH-TOKEN 파싱
 	 * 
-	 * @param HttpServletRequest req
+	 * @param HttpServletRequest request
 	 * @return String
 	 */
-    public String resolveRefreshToken(HttpServletRequest req) {
-        return req.getHeader("X-AUTH-REFRESH-TOKEN");
+    public String resolveRefreshToken(HttpServletRequest request) {
+    	Cookie[] cookies = request.getCookies();
+    	
+    	if(cookies != null) {
+    		for(Cookie cookie : cookies) {    		
+        		if(cookie.getName().equals("X-AUTH-REFRESH-TOKEN")) {
+        			return cookie.getValue();
+        		}
+        	}
+    	}
+    	
+        return null;
     }
     
     /**

@@ -1,8 +1,5 @@
 package com.myapp.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +37,7 @@ public class LoginService {
 	 * 
 	 * @param String id
 	 * @param String password
-	 * @return Map<String, String>
+	 * @return 
 	 */
 	public void login(String id, String password, HttpServletResponse response) {
 		//입력받은 ID로 유저를 가져온다
@@ -60,15 +57,12 @@ public class LoginService {
 	 * 리프레쉬 토큰 로그인
 	 * 
 	 * @param HttpServletRequest request
-	 * @return Map<String, String>
+	 * @return 
 	 */
-	public Map<String, String> refreshLogin(HttpServletRequest request) {
+	public void refreshLogin(HttpServletResponse response) {
 		User user = userService.findUser();
 		
-		Map<String, String> jwtMap = new HashMap<String, String>();
-        jwtMap.put("access", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
-		
-		return jwtMap;
+		setCookie(response, "X-AUTH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
 	}
 	
 	/**
@@ -80,18 +74,19 @@ public class LoginService {
 	public void logout(HttpServletRequest request) {
     	Cookie[] cookies = request.getCookies();
     	
-    	System.out.println("logoutService cookies : " + cookies);
+    	ValueOperations<String, String> vop = redisTemplate.opsForValue();
     	
+    	//access, refresh token을 redis에 저장
     	for(Cookie cookie : cookies) {
-    		System.out.println("cookie name : " + cookie.getName() + ", value : " + cookie.getValue());
+    		String cookieValue = cookie.getValue();
+    		
+    		if(cookie.getName().equals("X-AUTH-TOKEN")) {
+    			vop.set("access-" + jwtTokenProvider.getUserPk(cookieValue, "access"), cookieValue);
+    		}else if(cookie.getName().equals("X-AUTH-REFRESH-TOKEN")) {
+    			vop.set("refresh-" + jwtTokenProvider.getUserPk(cookieValue, "refresh"), cookieValue);
+    		}
     	}
     	
-//		String accessToken = jwtTokenProvider.resolveAccessToken(request);
-//		String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
-//		
-//		ValueOperations<String, String> vop = redisTemplate.opsForValue();
-//        vop.set("access-" + jwtTokenProvider.getUserPk(accessToken, "access"), accessToken);
-//        vop.set("refresh-" + jwtTokenProvider.getUserPk(refreshToken, "refresh"), refreshToken);
 	}
 	
 	/**

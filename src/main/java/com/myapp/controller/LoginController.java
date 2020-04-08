@@ -1,7 +1,5 @@
 package com.myapp.controller;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,13 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myapp.common.CommonResult;
-import com.myapp.common.SingleResult;
 import com.myapp.service.LoginService;
 import com.myapp.service.ResponseService;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -60,18 +55,15 @@ public class LoginController {
     /**
    	 * 리프레쉬 토큰 로그인
    	 * 
-   	 * @param X-AUTH-TOKEN
-   	 * @param HttpServletRequest request
-   	 * @return SingleResult<Map<String, String>>
+   	 * @param HttpServletResponse response
+   	 * @return CommonResult
    	 */
     @ApiOperation(value = "리프레쉬 토큰 로그인", notes = "리프레쉬 토큰으로 로그인을 한다")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-REFRESH-TOKEN", value = "refresh_token", required = true, dataType = "String", paramType = "header") })
     @GetMapping(value = "/login/refresh")
-    public SingleResult<Map<String, String>> refreshLogin(HttpServletRequest request) {
-    	Map<String, String> jwtToken = loginService.refreshLogin(request);
+    public CommonResult refreshLogin(HttpServletResponse response) {
+    	loginService.refreshLogin(response);
     	
-    	//로그인이 성공하면 jwt access token을 발급
-        return responseService.getSingleResult(jwtToken);
+        return responseService.getSuccessResult();
 	}
        
     /**
@@ -81,8 +73,6 @@ public class LoginController {
 	 * @return CommonResult
 	 */
     @ApiOperation(value = "로그아웃", notes = "로그아웃을 한다")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "access_token", required = true, dataType = "String", paramType = "header"),
-    					 @ApiImplicitParam(name = "X-AUTH-REFRESH-TOKEN", value = "refresh_token", required = true, dataType = "String", paramType = "header")})
     @GetMapping(value = "/logout")
     public CommonResult logout(HttpServletRequest request) {
  
