@@ -47,10 +47,14 @@ public class LoginService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new LoginFailedException();
         }
-        
+        String access = jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access");
+        String refresh = jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh");
         //로그인이 성공하면 X-AUTH-TOKEN, X-AUTH-REFRESH-TOKEN을 세팅해줌
-        setCookie(response, "X-AUTH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
-        setCookie(response, "X-AUTH-REFRESH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh"));
+        setCookie(response, "X-AUTH-TOKEN", access);
+        setCookie(response, "X-AUTH-REFRESH-TOKEN",  refresh);
+        
+        System.out.println("login access : " + access);
+        System.out.println("login refresh : " + refresh);
 	}
 
 	/**
@@ -72,6 +76,8 @@ public class LoginService {
 	 * @return 
 	 */
 	public void logout(HttpServletRequest request) {
+		String uid = userService.findUser().getUid();
+		
     	Cookie[] cookies = request.getCookies();
     	
     	ValueOperations<String, String> vop = redisTemplate.opsForValue();
@@ -81,12 +87,14 @@ public class LoginService {
     		String cookieValue = cookie.getValue();
     		
     		if(cookie.getName().equals("X-AUTH-TOKEN")) {
-    			vop.set("access-" + jwtTokenProvider.getUserPk(cookieValue, "access"), cookieValue);
+    			vop.set("access-" + uid, cookieValue);
     		}else if(cookie.getName().equals("X-AUTH-REFRESH-TOKEN")) {
-    			vop.set("refresh-" + jwtTokenProvider.getUserPk(cookieValue, "refresh"), cookieValue);
+    			vop.set("refresh-" + uid, cookieValue);
     		}
     	}
-    	
+    	System.out.println("logout userMsrl : " + uid);
+    	System.out.println("logout access : " + vop.get("access-" + uid));
+    	System.out.println("logout refresh : " + vop.get("refresh-" + uid));
 	}
 	
 	/**
