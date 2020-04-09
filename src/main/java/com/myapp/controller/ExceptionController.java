@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myapp.advice.exception.AuthenticationEntryPointException;
-import com.myapp.advice.exception.TokenExpiredException;
 import com.myapp.common.CommonResult;
 
 import springfox.documentation.annotations.ApiIgnore;
@@ -42,16 +41,5 @@ public class ExceptionController {
 	@RequestMapping(value = "/access-denied")
     public CommonResult accessdeniedException() throws AccessDeniedException {
         throw new AccessDeniedException("");
-    }
-	
-	/**
-	 * TokenExpiredException 예외 발생
-	 * 
-	 * @param 
-	 * @return 
-	 */
-	@RequestMapping(value = "/token-expired")
-    public CommonResult tokenExpiredException(){
-        throw new TokenExpiredException();
     }
 }

@@ -92,9 +92,6 @@ public class LoginService {
     			vop.set("refresh-" + uid, cookieValue);
     		}
     	}
-    	System.out.println("logout userMsrl : " + uid);
-    	System.out.println("logout access : " + vop.get("access-" + uid));
-    	System.out.println("logout refresh : " + vop.get("refresh-" + uid));
 	}
 	
 	/**

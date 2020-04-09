@@ -15,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
+import com.myapp.advice.exception.TokenExpiredException;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -43,25 +45,18 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         //토큰 유효성 체크
         if(accessToken != null && jwtTokenProvider.validateToken(accessToken, "access")) {
         	
-        	System.out.println("access msrl" + jwtTokenProvider.getUserPk(accessToken, "access"));
-        	System.out.println("access : " + vop.get("access-" + jwtTokenProvider.getUserPk(accessToken, "access")));
-        	System.out.println("access : " + accessToken);
-        	
         	//로그아웃으로 만료된 토큰일경우 
         	if(accessToken.equals(vop.get("access-" + jwtTokenProvider.getUserPk(accessToken, "access")))) {
-        		httpResponse.sendRedirect("/exception/token-expired");
+        		throw new TokenExpiredException();
         	}
         	
             Authentication auth = jwtTokenProvider.getAuthentication(accessToken, "access");
             SecurityContextHolder.getContext().setAuthentication(auth);
             
         }else if(refreshToken != null && jwtTokenProvider.validateToken(refreshToken, "refresh")) {
-        	System.out.println("refresh msrl" + jwtTokenProvider.getUserPk(refreshToken, "refresh"));
-        	System.out.println("refresh : " + vop.get("refresh-" + jwtTokenProvider.getUserPk(refreshToken, "refresh")));
-        	System.out.println("refresh : " + refreshToken);
         	//로그아웃으로 만료된 토큰일경우
 			if(refreshToken.equals(vop.get("refresh-" + jwtTokenProvider.getUserPk(refreshToken, "refresh")))) {
-				httpResponse.sendRedirect("/exception/token-expired");
+				throw new TokenExpiredException();
 			}
 			
         	Authentication auth = jwtTokenProvider.getAuthentication(refreshToken, "refresh");
