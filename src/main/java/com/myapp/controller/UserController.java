@@ -85,11 +85,10 @@ public class UserController {
     /**
 	 * 전체 회원 조회
 	 * 
-	 * @param X-AUTH-TOKEN
+	 * @param 
 	 * @return ListResult
 	 */
     @ApiOperation(value = "전체 회원 조회", notes = "모든 회원을 조회한다")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
     @GetMapping(value = "/users")
     public ListResult<User> findAllUsers() {
         return responseService.getListResult(userService.findAllUsers());
@@ -98,11 +97,10 @@ public class UserController {
     /**
 	 * 회원 조회
 	 * 
-	 * @param X-AUTH-TOKEN
+	 * @param 
 	 * @return SingleResult
 	 */
     @ApiOperation(value = "회원 단건 조회", notes = "토큰으로 인증된 회원을 조회한다")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = false, dataType = "String", paramType = "header") })
     @GetMapping(value = "/user")
     public SingleResult<User> findUserById() {
         return responseService.getSingleResult(userService.findUser());
@@ -111,7 +109,6 @@ public class UserController {
     /**
 	 * 회원 수정
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param long msrl
 	 * @param String name
 	 * @param String password
@@ -122,8 +119,7 @@ public class UserController {
 	 * @return SingleResult
 	 */
     //swagger에서 파라미터를 map 객체로 받는것을 지원하지 않아 여기 선언 후 updateMap으로 받음
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header"),
-    					 @ApiImplicitParam(name = "name", value = "회원이름", required = false, dataType = "String", paramType = "query"),
+    @ApiImplicitParams({ @ApiImplicitParam(name = "name", value = "회원이름", required = false, dataType = "String", paramType = "query"),
     					 @ApiImplicitParam(name = "password", value = "비밀번호", required = false, dataType = "String", paramType = "query"),
     					 @ApiImplicitParam(name = "phoneNumber", value = "휴대폰번호", required = false, dataType = "String", paramType = "query"),
     					 @ApiImplicitParam(name = "address", value = "주소", required = false, dataType = "String", paramType = "query"),
@@ -146,12 +142,10 @@ public class UserController {
     /**
 	 * 회원 삭제
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param int msrl
 	 * @return SingleResult
 	 */
     @ApiOperation(value = "회원 삭제", notes = "회원정보를 삭제한다")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
     @DeleteMapping(value = "/user/{msrl}")
     public CommonResult delete( @ApiParam(value = "회원번호", required = true) @PathVariable long msrl) {
     	

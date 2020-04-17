@@ -21,8 +21,6 @@ import com.myapp.service.OrderService;
 import com.myapp.service.ResponseService;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -45,12 +43,10 @@ public class OrderController {
 	/**
 	 * 전체 주문 조회
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param 
 	 * @return ListResult
 	 */
 	@ApiOperation(value = "전체 주문 조회", notes = "전체 주문을 조회함")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
 	@GetMapping("/orders")
 	public ListResult<Order> findAllOrders(){
 		return responseService.getListResult(orderService.findAllOrders());
@@ -59,12 +55,10 @@ public class OrderController {
 	/**
 	 * 회원 주문내역 조회
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param long msrl
 	 * @return ListResult
 	 */
 	@ApiOperation(value = "회원 주문내역 조회", notes = "요청한 회원의 주문내역을 조회함")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
 	@GetMapping("/orders/{msrl}")
 	public ListResult<Order> findOrders(@ApiParam(value = "회원번호", required = true) @PathVariable long msrl) {
 		return responseService.getListResult(orderService.findOrders(msrl));
@@ -73,14 +67,12 @@ public class OrderController {
 	/**
 	 * 주문 추가
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param String orderUserId
 	 * @param String address
 	 * @param List<OrderProductParams> productList
 	 * @return CommonResult
 	 */
 	@ApiOperation(value = "주문 추가", notes = "주문을 추가함")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
 	@PostMapping("/order")
 	public CommonResult addOrder(@ApiParam(value = "주문 입력 시 필요한 데이터\n배송지, 주문자id, 상품id, 상품갯수를 입력받는다", required = true) @RequestBody OrderParams orderParams) {
 		orderService.addOrder(orderParams);
@@ -91,13 +83,11 @@ public class OrderController {
 	/**
 	 * 주문 내용 수정
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param long id
 	 * @param String address
 	 * @param List<OrderProductParams> productList
 	 * @return SingleResult
 	 */
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")})
     @ApiOperation(value = "주문 내용 수정", notes = "주문 내용을 수정한다")
     @PutMapping(value = "/order/{id}")
 	public CommonResult modifyOrder( @ApiParam(value = "상품번호", required = true) @PathVariable long id,
@@ -112,12 +102,10 @@ public class OrderController {
     /**
 	 * 주문 삭제
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param long id
 	 * @return SingleResult
 	 */
     @ApiOperation(value = "주문 삭제", notes = "주문을 삭제한다")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
     @DeleteMapping(value = "/order/{id}")
     public CommonResult deleteOrder( @ApiParam(value = "주문번호", required = true) @PathVariable long id) {
     	orderService.deleteOrder(id);
@@ -128,12 +116,10 @@ public class OrderController {
     /**
 	 * 주문 취소
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param long id
 	 * @return ListResult
 	 */
 	@ApiOperation(value = "주문 취소", notes = "주문을 취소함")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
 	@PutMapping("/order/cancel/{id}")
 	public CommonResult cancelOrder (@ApiParam(value = "주문번호", required = true) @PathVariable long id){
 		orderService.cancelOrder(id);
@@ -144,12 +130,10 @@ public class OrderController {
 	/**
 	 * 배송상태 변경
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param long id
 	 * @return ListResult
 	 */
 	@ApiOperation(value = "배송상태 변경", notes = "배송상태를 변경함")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
 	@PutMapping("/order/delevery/{status}")
 	public CommonResult orderDeliveryUpdate (@ApiParam(value = "주문번호", required = true) @PathVariable long id,
 											 @ApiParam(value = "배송상태", required = true) @PathVariable String status){

@@ -16,7 +16,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 로그인 관련 컨트롤러
@@ -25,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Api(tags = {"1. Login"})
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/v1")

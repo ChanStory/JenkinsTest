@@ -52,9 +52,6 @@ public class LoginService {
         //로그인이 성공하면 X-AUTH-TOKEN, X-AUTH-REFRESH-TOKEN을 세팅해줌
         setCookie(response, "X-AUTH-TOKEN", access);
         setCookie(response, "X-AUTH-REFRESH-TOKEN",  refresh);
-        
-        System.out.println("login access : " + access);
-        System.out.println("login refresh : " + refresh);
 	}
 
 	/**

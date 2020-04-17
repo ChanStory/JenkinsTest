@@ -43,7 +43,6 @@ public class ProductController {
 	/**
 	 * 전체 상품 조회
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param 
 	 * @return ListResult
 	 */
@@ -56,7 +55,6 @@ public class ProductController {
 	/**
 	 * 조건부 상품 조회
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param String condition
 	 * @param String value
 	 * @return ListResult
@@ -72,7 +70,6 @@ public class ProductController {
 	/**
 	 * 상품 추가
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param String name
 	 * @param int price
 	 * @param String description
@@ -83,7 +80,6 @@ public class ProductController {
 	 * @return CommonResult
 	 */
 	@ApiOperation(value = "상품추가", notes = "상품을 추가함")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
 	@PostMapping("/product")
 	public CommonResult addProduct(@ApiParam(value = "상품 입력 시 필요한 데이터", required = true) @RequestBody Product product) {
 		productService.addProduct(product);
@@ -94,7 +90,6 @@ public class ProductController {
 	/**
 	 * 상품 수정
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param long id
 	 * @param String name
 	 * @param int price
@@ -106,8 +101,7 @@ public class ProductController {
 	 * @return SingleResult
 	 */
     //swagger에서 파라미터를 map 객체로 받는것을 지원하지 않아 여기 선언 후 updateMap으로 받음
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header"),
-    					 @ApiImplicitParam(name = "name", value = "상품명", required = false, dataType = "String", paramType = "query"),
+    @ApiImplicitParams({ @ApiImplicitParam(name = "name", value = "상품명", required = false, dataType = "String", paramType = "query"),
     					 @ApiImplicitParam(name = "price", value = "가격", required = false, dataType = "int", paramType = "query"),
     					 @ApiImplicitParam(name = "description", value = "상품설명", required = false, dataType = "String", paramType = "query"),
     					 @ApiImplicitParam(name = "imageName", value = "상품이미지파일명", required = false, dataType = "String", paramType = "query"),
@@ -127,12 +121,10 @@ public class ProductController {
     /**
 	 * 상품 삭제
 	 * 
-	 * @param X-AUTH-TOKEN
 	 * @param long id
 	 * @return SingleResult
 	 */
     @ApiOperation(value = "상품 삭제", notes = "상품을 삭제한다")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header") })
     @DeleteMapping(value = "/product/{id}")
     public CommonResult deleteProduct( @ApiParam(value = "상품번호", required = true) @PathVariable long id) {
     	productService.deleteProduct(id);
