@@ -32,6 +32,10 @@ public class LoginService {
     
     private final RedisTemplate<String, String> redisTemplate;
 	
+    private int accessCookieValidTime = 60 * 60; //accessToken 쿠키 setTime 1시간
+    
+    private int refreshCookieValidTime = 60 * 60 * 24 * 14; //refreshToken 쿠키 setTime 14일
+    
 	/**
 	 * 로그인
 	 * 
@@ -50,8 +54,8 @@ public class LoginService {
         String access = jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access");
         String refresh = jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh");
         //로그인이 성공하면 X-AUTH-TOKEN, X-AUTH-REFRESH-TOKEN을 세팅해줌
-        setCookie(response, "X-AUTH-TOKEN", access);
-        setCookie(response, "X-AUTH-REFRESH-TOKEN",  refresh);
+        setCookie(response, "X-AUTH-TOKEN", access, accessCookieValidTime); //
+        setCookie(response, "X-AUTH-REFRESH-TOKEN",  refresh, refreshCookieValidTime);
 	}
 
 	/**
@@ -63,7 +67,7 @@ public class LoginService {
 	public void refreshLogin(HttpServletResponse response) {
 		User user = userService.findUser();
 		
-		setCookie(response, "X-AUTH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"));
+		setCookie(response, "X-AUTH-TOKEN", jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access"), accessCookieValidTime);
 	}
 	
 	/**
@@ -99,9 +103,9 @@ public class LoginService {
 	 * @param String value
 	 * @return 
 	 */
-	public void setCookie(HttpServletResponse response, String name, String value) {
+	public void setCookie(HttpServletResponse response, String name, String value, int setTime) {
 		Cookie cookie = new Cookie(name, value);
-		cookie.setMaxAge(60 * 60 * 24* 14);
+		cookie.setMaxAge(setTime);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
 	}

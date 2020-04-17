@@ -7,7 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -34,13 +33,11 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     
     //Request로 넘어오는 Jwt Token의 유효성을 검증하는 filter를 filterChain에 등록
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {    	
         String accessToken = jwtTokenProvider.resolveAccessToken((HttpServletRequest) request);
         String refreshToken = jwtTokenProvider.resolveRefreshToken((HttpServletRequest) request);
         
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
-        
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
         
         //토큰 유효성 체크
         if(accessToken != null && jwtTokenProvider.validateToken(accessToken, "access")) {
