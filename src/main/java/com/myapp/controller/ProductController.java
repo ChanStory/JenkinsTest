@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.myapp.common.CommonResult;
@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 @Api(tags = {"3. Product"})
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1")
+@RequestMapping(value = "/v1")
 public class ProductController {
 
 	private final ResponseService responseService;
@@ -73,7 +73,7 @@ public class ProductController {
 	 * @param String name
 	 * @param int price
 	 * @param String description
-	 * @param String imageName
+	 * @param byte[] image
 	 * @param String kind
 	 * @param String brand
 	 * @param int stockQuantity
@@ -81,7 +81,7 @@ public class ProductController {
 	 */
 	@ApiOperation(value = "상품추가", notes = "상품을 추가함")
 	@PostMapping("/product")
-	public CommonResult addProduct(@ApiParam(value = "상품 입력 시 필요한 데이터", required = true) @RequestBody Product product) {
+	public CommonResult addProduct(@ApiParam(value = "상품 입력 시 필요한 데이터", required = true) @RequestPart Product product) {
 		productService.addProduct(product);
 				
 		return responseService.getSuccessResult();
@@ -94,7 +94,7 @@ public class ProductController {
 	 * @param String name
 	 * @param int price
 	 * @param String description
-	 * @param String imageName
+	 * @param byte[] image
 	 * @param String kind
 	 * @param String brand
 	 * @param int stockQuantity
@@ -104,7 +104,7 @@ public class ProductController {
     @ApiImplicitParams({ @ApiImplicitParam(name = "name", value = "상품명", required = false, dataType = "String", paramType = "query"),
     					 @ApiImplicitParam(name = "price", value = "가격", required = false, dataType = "int", paramType = "query"),
     					 @ApiImplicitParam(name = "description", value = "상품설명", required = false, dataType = "String", paramType = "query"),
-    					 @ApiImplicitParam(name = "imageName", value = "상품이미지파일명", required = false, dataType = "String", paramType = "query"),
+    					 @ApiImplicitParam(name = "image", value = "상품이미지파일", required = false, dataType = "String", paramType = "query"),
     					 @ApiImplicitParam(name = "kind", value = "상품종류", required = false, dataType = "String", paramType = "query"),
     					 @ApiImplicitParam(name = "brand", value = "브랜드", required = false, dataType = "String", paramType = "query"),
     					 @ApiImplicitParam(name = "stockQuantity", value = "상품수량", required = false, dataType = "int", paramType = "query")})

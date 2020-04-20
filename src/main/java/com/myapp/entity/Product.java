@@ -66,7 +66,8 @@ public class Product {
     @Column(nullable = false)
     private String description; //상품설명
     
-    private String imageName; //상품 이미지파일 이름
+    @Lob
+    private byte[] image; //상품 이미지파일
     
     @Column(nullable = false)
     private String kind; //종류

@@ -105,6 +105,8 @@ public class LoginService {
 	 */
 	public void setCookie(HttpServletResponse response, String name, String value, int setTime) {
 		Cookie cookie = new Cookie(name, value);
+		cookie.setDomain("localhost");
+		cookie.setPath("/");
 		cookie.setMaxAge(setTime);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
