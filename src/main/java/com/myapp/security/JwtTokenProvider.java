@@ -126,10 +126,12 @@ public class JwtTokenProvider {
     	Cookie[] cookies = request.getCookies();
     	
     	if(cookies != null) {
-    		for(Cookie cookie : cookies) {    		
-        		if(cookie.getName().equals("X-AUTH-TOKEN")) {
-        			return cookie.getValue();
-        		}
+    		for(Cookie cookie : cookies) {  
+    			System.out.println("cookie name : " + cookie.getName() + ", value : " + cookie.getValue() 
+    			+ ", path : " + cookie.getPath() + ", domain : " + cookie.getDomain() + ", maxAge : " + cookie.getMaxAge());
+//        		if(cookie.getName().equals("X-AUTH-TOKEN")) {
+//        			return cookie.getValue();
+//        		}
         	}
     	}
     	

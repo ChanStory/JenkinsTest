@@ -53,8 +53,9 @@ public class LoginService {
         }
         String access = jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "access");
         String refresh = jwtTokenProvider.createToken(user.getUsername(), user.getRoles(), "refresh");
+        
         //로그인이 성공하면 X-AUTH-TOKEN, X-AUTH-REFRESH-TOKEN을 세팅해줌
-        setCookie(response, "X-AUTH-TOKEN", access, accessCookieValidTime); //
+        setCookie(response, "X-AUTH-TOKEN", access, accessCookieValidTime); 
         setCookie(response, "X-AUTH-REFRESH-TOKEN",  refresh, refreshCookieValidTime);
 	}
 
